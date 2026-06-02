@@ -179,7 +179,7 @@ body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased
 .btn-ol-inv{background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.30)!important;color:rgba(255,255,255,.88)!important;padding:11px 26px!important;border-radius:9px!important;font-size:14px!important;font-weight:500!important;cursor:pointer;transition:all .22s;backdrop-filter:blur(6px);text-decoration:none;display:inline-flex;align-items:center;gap:7px;}
 .btn-ol-inv:hover{background:rgba(255,255,255,.22)!important;border-color:rgba(255,255,255,.50)!important;color:#fff!important}
 .gold-divider{width:48px;height:2.5px;background:var(--grd-gold);border-radius:2px;margin:0 auto 20px}
-.page-hero{background:linear-gradient(160deg,#E8EDF8 0%,#DDE5F5 40%,#E2EAF7 75%,#E6EDF8 100%);min-height:calc(100vh - 68px);display:flex;align-items:center;border-bottom:1px solid rgba(15,37,87,.10);text-align:center;position:relative;overflow:hidden;padding:60px 0;}
+.page-hero{background:linear-gradient(160deg,#E8EDF8 0%,#DDE5F5 40%,#E2EAF7 75%,#E6EDF8 100%);min-height:70vh;display:flex;align-items:center;border-bottom:1px solid rgba(15,37,87,.10);text-align:center;position:relative;overflow:hidden;padding:50px 0;}
 .page-hero::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(15,37,87,.05) 1px,transparent 1px);background-size:30px 30px;}
 .page-hero::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 5% 15%,rgba(201,168,76,.11) 0%,transparent 55%),radial-gradient(ellipse 55% 65% at 95% 85%,rgba(15,37,87,.09) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 52% 4%,rgba(45,107,228,.08) 0%,transparent 55%);}
 .page-hero>.cxl{position:relative;z-index:1;width:100%;}
@@ -224,6 +224,44 @@ body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .pricing-featured{border:2px solid var(--blue)!important;box-shadow:0 16px 48px rgba(45,107,228,.15)!important}
 .pricing-featured::before{background:var(--grd-blue)!important}
+
+/* Responsive adjustments */
+@media (max-width:1024px){
+  .rc-nav{padding:0 24px;height:64px}
+  .nav-brand-wordmark span:first-child{font-size:12px}
+  .nav-brand-wordmark span:last-child{font-size:9px}
+  .nav-links{gap:6px}
+  .cxl{padding:0 24px}
+  .hero-inner{padding:36px 24px;gap:28px;flex-direction:column;align-items:flex-start}
+  .hero-h1{font-size:40px}
+  .hero-sub{max-width:100%}
+  .hero-right{max-width:100%}
+  .monitor{border-radius:12px}
+  .sec-light,.sec-grey,.sec-dark{padding:48px 0}
+  .sec-h2{font-size:32px}
+  .feat-card{padding:22px}
+}
+
+@media (max-width:600px){
+  .rc-nav{height:56px;padding:0 14px}
+  .nav-links{display:none}
+  .nav-cta{padding:8px 12px;font-size:13px}
+  .hero{min-height:auto}
+  .hero-inner{padding:22px 16px;gap:18px}
+  .hero-h1{font-size:28px;letter-spacing:-1px}
+  .hero-sub{font-size:14px}
+  .hero-btns{gap:10px}
+  .hero-stats{display:none}
+  .mon-url{font-size:11px;padding:6px}
+  .cxl{padding:0 16px}
+  .trust{padding:12px 16px}
+  .sec-light,.sec-grey,.sec-dark{padding:32px 0}
+  .cxl > div[style*="grid-template-columns:1fr 1fr"]{display:block}
+  .why-card{padding:18px}
+  .feat-card{padding:18px}
+  .rc-footer div[style*="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr"]{grid-template-columns:1fr;gap:18px;padding:28px 16px}
+  .rc-footer footer, .rc-footer{padding-bottom:20px}
+}
 </style>
 </head>
 <body>
@@ -237,12 +275,13 @@ body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased
   <div class="nav-links">
     <button class="nl active" id="nl-home" onclick="showPage('home')">Home</button>
     <button class="nl" id="nl-features" onclick="showPage('features')">Features</button>
+    <button class="nl" id="nl-tutorials" onclick="showPage('tutorials')">Tutorials</button>
     <button class="nl" id="nl-trades" onclick="showPage('trades')">Trades</button>
     <button class="nl" id="nl-pricing" onclick="showPage('pricing')">Pricing</button>
     <button class="nl" id="nl-faq" onclick="showPage('faq')">FAQ</button>
     <button class="nl" id="nl-contact" onclick="showPage('contact')">Contact</button>
   </div>
-  <a class="nav-cta" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Open the App →</a>
+  <a class="nav-cta" href="#" onclick="showPage('demo');return false">📅 Request Demo</a>
 </nav>
 
 <!-- ══════════ PAGE: HOME ══════════ -->
@@ -259,9 +298,9 @@ body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased
     <div class="hero-left">
       <div class="hero-badge"><div class="badge-dot"></div>Digital Estimation Platform · Canada</div>
       <h1 class="hero-h1">Do your own<br>estimates.<br><em>Faster &amp; smarter.</em></h1>
-      <p class="hero-sub">Real Cost is a <strong>SaaS estimation platform</strong> for trade contractors. Upload your drawings, let count symbols , build your bid, and generate a quote letter — all in one place.</p>
+      <p class="hero-sub">Real Cost is a <strong>SaaS estimation platform</strong> for trade contractors. Upload your drawings, count symbols, build your bid, and generate a quote letter — all in one place.</p>
       <div class="hero-btns">
-        <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Open the App →</a>
+        <button class="btn-prim" onclick="showPage('demo')">📅 Request Demo</button>
         <button class="btn-ghost" onclick="showPage('features')">▶ See all features</button>
       </div>
       <div class="hero-stats">
@@ -516,6 +555,237 @@ body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased
 </div>
 <div id="footer-home"></div>
 </div><!-- /home -->
+
+<!-- ════════════════ PAGE: DEMO ════════════════ -->
+<div id="pg-demo" style="display:none">
+<section class="page-hero">
+  <div class="page-hero-accent"></div>
+  <div class="cxl">
+    <div class="pg-badge">Schedule a demo</div>
+    <div class="ph-title">See Bid Winner live.<br>No pressure.</div>
+    <p class="sec-sub" style="max-width:500px;margin:0 auto 44px">A 30-minute walkthrough tailored to your trade — live takeoff, Canadian pricing, and quote generation on real drawings.</p>
+    <!-- Demo feature chips -->
+    <!-- <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:36px">
+      <div class="ph-chip"><span style="font-size:16px">⏱</span><div style="text-align:left"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.2">30 minutes</div><div style="font-size:10px;color:rgba(220,228,248,.4);margin-top:1px">Focused walkthrough</div></div></div>
+      <div class="ph-chip"><span style="font-size:16px">✅</span><div style="text-align:left"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.2">No commitment</div><div style="font-size:10px;color:rgba(220,228,248,.4);margin-top:1px">Zero pressure</div></div></div>
+      <div class="ph-chip"><span style="font-size:16px">🎯</span><div style="text-align:left"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.2">Tailored to you</div><div style="font-size:10px;color:rgba(220,228,248,.4);margin-top:1px">Your trade &amp; drawings</div></div></div>
+      <div class="ph-chip ph-chip-gold"><span style="font-size:16px">🆓</span><div style="text-align:left"><div style="font-size:12px;font-weight:600;line-height:1.2">Free trial included</div><div style="font-size:10px;opacity:.65;margin-top:1px">14 days full access</div></div></div>
+      <div class="ph-chip"><span style="font-size:16px">⭐</span><div style="text-align:left"><div style="font-size:12px;font-weight:600;color:#fff;line-height:1.2">4.6 / 5 Capterra</div><div style="font-size:10px;color:rgba(220,228,248,.4);margin-top:1px">Rated by contractors</div></div></div>
+    </div> -->
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-prim" onclick="document.querySelector('#pg-demo .sec-grey').scrollIntoView({behavior:'smooth'})">Book your demo now →</button>
+      <a href="tel:6476778399" class="btn-ghost" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px">📞 Prefer to call?</a>
+    </div>
+  </div>
+</section>
+<div style="background:#fff;border-bottom:1px solid var(--bdl);padding:22px 80px">
+  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px">
+    <div style="display:flex;align-items:center;gap:12px"><div style="width:38px;height:38px;border-radius:50%;background:var(--blight);display:flex;align-items:center;justify-content:center;font-size:16px">⏱</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">30 minutes</div><div style="font-size:12px;color:#8A92A6;font-weight:300">Focused walkthrough</div></div></div>
+    <div style="width:1px;height:36px;background:var(--bdl)"></div>
+    <div style="display:flex;align-items:center;gap:12px"><div style="width:38px;height:38px;border-radius:50%;background:#E6F7EE;display:flex;align-items:center;justify-content:center;font-size:16px">✅</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">No commitment</div><div style="font-size:12px;color:#8A92A6;font-weight:300">Zero pressure, zero obligation</div></div></div>
+    <div style="width:1px;height:36px;background:var(--bdl)"></div>
+    <div style="display:flex;align-items:center;gap:12px"><div style="width:38px;height:38px;border-radius:50%;background:var(--rlight);display:flex;align-items:center;justify-content:center;font-size:16px">🎯</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">Tailored to you</div><div style="font-size:12px;color:#8A92A6;font-weight:300">We use your trade, your drawings</div></div></div>
+    <div style="width:1px;height:36px;background:var(--bdl)"></div>
+    <div style="display:flex;align-items:center;gap:12px"><div style="width:38px;height:38px;border-radius:50%;background:var(--blight);display:flex;align-items:center;justify-content:center;font-size:16px">🆓</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">Free trial included</div><div style="font-size:12px;color:#8A92A6;font-weight:300">14 days full access after demo</div></div></div>
+    <div style="width:1px;height:36px;background:var(--bdl)"></div>
+    <div style="display:flex;align-items:center;gap:12px"><div style="width:38px;height:38px;border-radius:50%;background:#FDF6E3;display:flex;align-items:center;justify-content:center;font-size:16px">⭐</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">4.6/5 Capterra</div><div style="font-size:12px;color:#8A92A6;font-weight:300">Rated by electrical contractors</div></div></div>
+  </div>
+</div>
+<section class="sec-grey">
+  <div class="cxl">
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:48px">
+      <div>
+        <div class="rc-form" id="demo-form-wrap">
+          <!-- step indicator -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:28px">
+            <div id="step-dot-1" style="width:30px;height:30px;border-radius:50%;background:var(--grd-blue);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;box-shadow:0 3px 10px rgba(45,107,228,.35)">1</div>
+            <span id="step-lbl-1" style="font-size:13px;font-weight:500;color:var(--txt)">Your details</span>
+            <div style="flex:1;height:2px;background:var(--bdl);border-radius:2px;position:relative"><div id="step-bar" style="position:absolute;left:0;top:0;height:100%;width:0%;background:var(--grd-blue);border-radius:2px;transition:width .4s"></div></div>
+            <div id="step-dot-2" style="width:30px;height:30px;border-radius:50%;background:#F0F3FA;border:1.5px solid var(--bdl);color:#A0AABB;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s">2</div>
+            <span id="step-lbl-2" style="font-size:13px;font-weight:500;color:#A0AABB;transition:color .3s">Pick date & time</span>
+          </div>
+          <!-- step 1 -->
+          <div id="demo-step-1">
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;color:var(--txt);margin-bottom:22px">Tell us about yourself</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+              <div><label class="flabel">First name *</label><input class="finput" id="d-fname" placeholder="John" oninput="validateStep1()"/></div>
+              <div><label class="flabel">Last name *</label><input class="finput" id="d-lname" placeholder="Smith" oninput="validateStep1()"/></div>
+            </div>
+            <div style="margin-bottom:14px"><label class="flabel">Work email *</label><input class="finput" id="d-email" type="email" placeholder="john@company.com" oninput="validateStep1()"/></div>
+            <div style="margin-bottom:14px"><label class="flabel">Company name *</label><input class="finput" id="d-company" placeholder="ABC Electrical Ltd." oninput="validateStep1()"/></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+              <div><label class="flabel">Phone number</label><input class="finput" id="d-phone" placeholder="(647) 000-0000"/></div>
+              <div><label class="flabel">Trade / sector *</label><select class="finput" id="d-trade" onchange="validateStep1()"><option value="">Select your trade</option><option>Electrical</option><option>Mechanical / HVAC</option><option>Plumbing</option><option>General contractor</option><option>Engineer / Architect</option></select></div>
+            </div>
+            <div style="margin-bottom:28px"><label class="flabel">What are you hoping to achieve? (optional)</label><select class="finput"><option value="">Select goal</option><option>Speed up my takeoff process</option><option>Reduce estimation errors</option><option>Get Canadian city-based pricing</option><option>Replace my current estimating tool</option><option>Just exploring options</option></select></div>
+            <button id="btn-to-step2" class="btn-form" onclick="goStep2()" disabled style="opacity:.4">Continue to scheduling →</button>
+          </div>
+          <!-- step 2 -->
+          <div id="demo-step-2" style="display:none">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px">
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;color:var(--txt)">Pick a date & time</div>
+              <button onclick="goStep1()" style="font-size:13px;color:var(--blue);background:none;border:none;cursor:pointer;font-weight:500">← Back</button>
+            </div>
+            <div style="background:#F8FAFE;border:1px solid var(--bdl);border-radius:14px;padding:20px;margin-bottom:18px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                <button onclick="prevMonth()" style="width:34px;height:34px;border-radius:8px;background:#fff;border:1px solid var(--bdl);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--txt)">‹</button>
+                <div id="cal-month-label" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--txt)">June 2026</div>
+                <button onclick="nextMonth()" style="width:34px;height:34px;border-radius:8px;background:#fff;border:1px solid var(--bdl);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--txt)">›</button>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px">
+                <div style="font-size:11px;font-weight:500;color:#A0AABB;text-align:center;padding:4px">S</div>
+                <div style="font-size:11px;font-weight:500;color:#A0AABB;text-align:center;padding:4px">M</div>
+                <div style="font-size:11px;font-weight:500;color:#A0AABB;text-align:center;padding:4px">T</div>
+                <div style="font-size:11px;font-weight:500;color:#A0AABB;text-align:center;padding:4px">W</div>
+                <div style="font-size:11px;font-weight:500;color:#A0AABB;text-align:center;padding:4px">T</div>
+                <div style="font-size:11px;font-weight:500;color:#A0AABB;text-align:center;padding:4px">F</div>
+                <div style="font-size:11px;font-weight:500;color:#A0AABB;text-align:center;padding:4px">S</div>
+              </div>
+              <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px"></div>
+            </div>
+            <div id="time-slots-wrap" style="display:none">
+              <div id="time-slots-label" style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:10px">Available times</div>
+              <div id="time-slots" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px"></div>
+            </div>
+            <div id="confirm-summary" style="display:none;background:var(--blight);border:1px solid rgba(45,107,228,.2);border-radius:10px;padding:16px;margin-bottom:16px">
+              <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:5px;text-transform:uppercase;letter-spacing:.07em">Your demo is scheduled for</div>
+              <div id="confirm-text" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--txt)"></div>
+              <div style="font-size:12px;color:#8A92A6;margin-top:3px;font-weight:300">Duration: 30 minutes · Video call or phone</div>
+            </div>
+            <button id="btn-confirm" class="btn-form" onclick="confirmDemo()" disabled style="opacity:.4">Confirm my demo →</button>
+          </div>
+          <!-- success -->
+          <div id="demo-success" style="display:none;text-align:center;padding:20px 0">
+            <div style="font-size:52px;margin-bottom:18px">🎉</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;color:var(--txt);margin-bottom:9px">You're booked!</div>
+            <div id="success-text" style="font-size:15px;color:#6B7489;max-width:360px;margin:0 auto 22px;line-height:1.8;font-weight:300"></div>
+            <div style="background:var(--blight);border:1px solid rgba(45,107,228,.18);border-radius:12px;padding:18px;max-width:350px;margin:0 auto 24px;text-align:left">
+              <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em">What happens next</div>
+              <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:9px"><span style="color:#1A6B45;font-size:14px;flex-shrink:0">✓</span><span style="font-size:13px;color:var(--txt);font-weight:300">Confirmation email sent to your inbox</span></div>
+              <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:9px"><span style="color:#1A6B45;font-size:14px;flex-shrink:0">✓</span><span style="font-size:13px;color:var(--txt);font-weight:300">Calendar invite with video call link</span></div>
+              <div style="display:flex;align-items:flex-start;gap:9px"><span style="color:#1A6B45;font-size:14px;flex-shrink:0">✓</span><span style="font-size:13px;color:var(--txt);font-weight:300">14-day free trial activated immediately</span></div>
+            </div>
+            <button onclick="resetDemo()" class="btn-ol-blue">Book another demo</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="rc-form" style="margin-bottom:18px;padding:26px">
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--txt);margin-bottom:20px">What we'll cover in 30 minutes</div>
+          <div style="display:flex;flex-direction:column">
+            <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid #F0F3FA"><div style="width:36px;height:36px;border-radius:10px;background:var(--blight);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">🗺</div><div><div style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:3px">Live digital takeoff</div><div style="font-size:12px;color:#6B7489;line-height:1.65;font-weight:300">AI auto-count and manual symbol placement on real drawings.</div></div></div>
+            <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid #F0F3FA"><div style="width:36px;height:36px;border-radius:10px;background:#E6F7EE;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">📍</div><div><div style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:3px">Canadian city pricing</div><div style="font-size:12px;color:#6B7489;line-height:1.65;font-weight:300">See how L1/L2/L3 regional pricing works for your city — live on screen.</div></div></div>
+            <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid #F0F3FA"><div style="width:36px;height:36px;border-radius:10px;background:var(--rlight);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">📋</div><div><div style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:3px">Bid page to quote letter</div><div style="font-size:12px;color:#6B7489;line-height:1.65;font-weight:300">Full workflow from estimate complete to branded PDF quote in under 2 minutes.</div></div></div>
+            <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 0"><div style="width:36px;height:36px;border-radius:10px;background:var(--blight);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">👥</div><div><div style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:3px">Team roles & management</div><div style="font-size:12px;color:#6B7489;line-height:1.65;font-weight:300">Owner and sub-estimator accounts, task assignment, and subscription management.</div></div></div>
+          </div>
+        </div>
+        <div style="background:var(--blight);border:1px solid rgba(45,107,228,.16);border-radius:16px;padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+          <div style="background:#fff;border:1px solid var(--bdl);border-radius:10px;padding:16px;text-align:center"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:700;color:var(--blue)">500+</div><div style="font-size:10px;color:#8A92A6;margin-top:4px;text-transform:uppercase;letter-spacing:.06em">Contractors</div></div>
+          <div style="background:#fff;border:1px solid var(--bdl);border-radius:10px;padding:16px;text-align:center"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:700;color:var(--blue)">4.6/5</div><div style="font-size:10px;color:#8A92A6;margin-top:4px;text-transform:uppercase;letter-spacing:.06em">Capterra</div></div>
+          <div style="background:#fff;border:1px solid var(--bdl);border-radius:10px;padding:16px;text-align:center"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:700;color:var(--gold)">30 min</div><div style="font-size:10px;color:#8A92A6;margin-top:4px;text-transform:uppercase;letter-spacing:.06em">Walkthrough</div></div>
+          <div style="background:#fff;border:1px solid var(--bdl);border-radius:10px;padding:16px;text-align:center"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:700;color:var(--gold)">Free</div><div style="font-size:10px;color:#8A92A6;margin-top:4px;text-transform:uppercase;letter-spacing:.06em">No card required</div></div>
+        </div>
+        <div style="background:var(--blight);border:1px solid rgba(45,107,228,.18);border-radius:12px;padding:18px">
+          <div style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:5px">Prefer to talk first?</div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--txt);margin-bottom:3px">📞 (647) 677-8399</div>
+          <div style="font-size:12px;color:#8A92A6;font-weight:300">Mon–Fri 9:00 AM – 6:00 PM ET · Ontario, Canada</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="footer-demo"></div>
+</div>
+
+<!-- ══════════ PAGE: TUTORIALS ══════════ -->
+<div id="pg-tutorials" style="display:none">
+<section class="page-hero">
+  <div class="page-hero-accent"></div>
+  <div class="cxl">
+    <div class="pg-badge">Tutorials</div>
+    <div class="ph-title">Learn Real Cost step by step.</div>
+    <p class="sec-sub" style="max-width:560px;margin:0 auto 44px">Follow application tutorials for onboarding, estimating workflows, and daily use of the platform.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:36px">
+      <button class="btn-prim" onclick="document.getElementById('tutorial-step-1').scrollIntoView({behavior:'smooth'})">Start tutorial</button>
+      <button class="btn-ghost" onclick="showPage('contact')">Ask for help</button>
+    </div>
+  </div>
+</section>
+<section class="sec-light">
+  <div class="cxl">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:56px">
+      <div class="feat-card"><div class="card-ico" style="background:rgba(45,107,228,.08)">1</div><div class="card-ttl">Upload drawings</div><div class="card-body">Drag and drop PDF plans into Real Cost and prepare your project for digital takeoff.</div></div>
+      <div class="feat-card"><div class="card-ico" style="background:rgba(26,107,69,.08)">2</div><div class="card-ttl">Count symbols</div><div class="card-body">Select a sample symbol and let the platform locate every matching items across the drawing set.</div></div>
+      <div class="feat-card"><div class="card-ico" style="background:rgba(201,168,76,.08)">3</div><div class="card-ttl">Build your bid</div><div class="card-body">Apply material, labour, overhead, and markup to complete your estimate in one place.</div></div>
+    </div>
+    <div id="tutorial-step-1" style="margin-bottom:60px">
+      <div class="sec-eyebrow">Step 1</div>
+      <div class="sec-h2">Upload drawings and prepare the project</div>
+      <p class="sec-sub" style="max-width:680px;margin-bottom:24px">Start by uploading your PDF plan set. The app renders every page so you can review each sheet, pan and zoom, and identify symbols for takeoff.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div style="background:#fff;border:1px solid #DDE3F0;border-radius:18px;padding:24px;box-shadow:0 20px 40px rgba(15,37,87,.06)">
+          <div style="font-size:14px;font-weight:700;color:var(--txt);margin-bottom:14px">What to do first</div>
+          <div style="font-size:13px;color:#6B7489;line-height:1.8">Upload your PDF drawings, check page thumbnails, and confirm the project location. Verify the plan quality before you begin takeoff.</div>
+        </div>
+        <div style="background:#F8FAFE;border:1px solid #E3E8F4;border-radius:18px;padding:24px">
+          <div style="font-size:14px;font-weight:700;color:var(--0B0F1C);margin-bottom:14px">Quick tip</div>
+          <div style="font-size:13px;color:#6B7489;line-height:1.8">Use the built-in page navigator to move between sheets and confirm every drawing is included.</div>
+        </div>
+      </div>
+    </div>
+    <div id="tutorial-step-2" style="margin-bottom:60px">
+      <div class="sec-eyebrow">Step 2</div>
+      <div class="sec-h2">Count symbols across every page</div>
+      <p class="sec-sub" style="max-width:680px;margin-bottom:24px">Draw a selection box around a fixture, outlet, or device. Real Cost finds every matching assembly and lets you verify counts instantly.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div style="background:#fff;border:1px solid #DDE3F0;border-radius:18px;padding:24px;box-shadow:0 20px 40px rgba(15,37,87,.06)">
+          <div style="font-size:14px;font-weight:700;color:var(--txt);margin-bottom:14px">What you’ll learn</div>
+          <div style="font-size:13px;color:#6B7489;line-height:1.8">How to place selection boxes, compare matches, adjust counts, and save symbol groups for estimating.</div>
+        </div>
+        <div style="background:#F8FAFE;border:1px solid #E3E8F4;border-radius:18px;padding:24px">
+          <div style="font-size:14px;font-weight:700;color:var(--0B0F1C);margin-bottom:14px">Quick tip</div>
+          <div style="font-size:13px;color:#6B7489;line-height:1.8">Review the sample symbol carefully when you count similar fixtures or devices.</div>
+        </div>
+      </div>
+    </div>
+    <div id="tutorial-step-3" style="margin-bottom:60px">
+      <div class="sec-eyebrow">Step 3</div>
+      <div class="sec-h2">Build your bid page and review pricing</div>
+      <p class="sec-sub" style="max-width:680px;margin-bottom:24px">Use the bid page to configure materials, labour, overhead and markup. The tutorial shows how totals update and how to compare pricing across cities.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div style="background:#fff;border:1px solid #DDE3F0;border-radius:18px;padding:24px;box-shadow:0 20px 40px rgba(15,37,87,.06)">
+          <div style="font-size:14px;font-weight:700;color:var(--txt);margin-bottom:14px">What to expect</div>
+          <div style="font-size:13px;color:#6B7489;line-height:1.8">See how material and labour are calculated, and how overhead and markup affect the final estimate.</div>
+        </div>
+        <div style="background:#F8FAFE;border:1px solid #E3E8F4;border-radius:18px;padding:24px">
+          <div style="font-size:14px;font-weight:700;color:var(--0B0F1C);margin-bottom:14px">Quick tip</div>
+          <div style="font-size:13px;color:#6B7489;line-height:1.8">Use the estimate graph to confirm the value breakdown before generating the quote.</div>
+        </div>
+      </div>
+    </div>
+    <div id="tutorial-step-4" style="margin-bottom:60px">
+      <div class="sec-eyebrow">Step 4</div>
+      <div class="sec-h2">Generate your quote letter</div>
+      <p class="sec-sub" style="max-width:680px;margin-bottom:24px">Finalize your bid and create a branded quote letter. The tutorial explains export options and client-ready formatting.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div style="background:#fff;border:1px solid #DDE3F0;border-radius:18px;padding:24px;box-shadow:0 20px 40px rgba(15,37,87,.06)">
+          <div style="font-size:14px;font-weight:700;color:var(--txt);margin-bottom:14px">What you’ll do</div>
+          <div style="font-size:13px;color:#6B7489;line-height:1.8">Generate a professional PDF quote letter with scope, totals, and project details ready to send.</div>
+        </div>
+        <div style="background:#F8FAFE;border:1px solid #E3E8F4;border-radius:18px;padding:24px">
+          <div style="font-size:14px;font-weight:700;color:var(--0B0F1C);margin-bottom:14px">Quick tip</div>
+          <div style="font-size:13px;color:#6B7489;line-height:1.8">Review totals and scope before export so the letter is client-ready on the first try.</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;display:flex;justify-content:center;gap:14px;flex-wrap:wrap">
+      <button class="btn-prim" onclick="showPage('demo')">View demo preview</button>
+      <button class="btn-ghost" onclick="showPage('contact')">Contact support</button>
+    </div>
+  </div>
+</section>
+<div id="footer-tutorials"></div>
+</div>
 
 <!-- ══════════ PAGE: FEATURES ══════════ -->
 <div id="pg-features" style="display:none">
@@ -843,7 +1113,8 @@ body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased
       </div>
       <p style="font-size:13px;color:rgba(200,210,240,.38);line-height:1.82;max-width:240px;font-weight:300">Digital estimation platform for trade contractors across Canada. Upload drawings, count symbols, build your bid, send your quote.</p>
       <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
-        <a href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener" style="background:var(--grd-blue);color:#fff;font-size:12px;font-weight:500;border-radius:7px;padding:8px 16px;text-decoration:none">🚀 Open App</a>
+        <a href="#" onclick="showPage('demo');return false" style="background:var(--grd-blue);color:#fff;font-size:12px;font-weight:500;border-radius:7px;padding:8px 16px;text-decoration:none">📅 Request Demo</a>
+        <a href="#" onclick="showPage('tutorials');return false" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-size:12px;font-weight:400;border-radius:7px;padding:8px 16px;text-decoration:none;border:1px solid rgba(255,255,255,.12)">📚 Tutorials</a>
         <a href="tel:6476778399" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-size:12px;font-weight:400;border-radius:7px;padding:8px 16px;text-decoration:none;border:1px solid rgba(255,255,255,.12)">📞 Call us</a>
       </div>
       <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
@@ -860,7 +1131,7 @@ body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased
           <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,.65)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
         </a> </div>
     </div>
-    <div><div class="f-lbl">Platform</div><a class="f-lnk" href="#" onclick="showPage('features');return false">Features</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Supported trades</a><a class="f-lnk" href="#" onclick="showPage('pricing');return false">Pricing</a><a class="f-lnk" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">Open the app</a></div>
+    <div><div class="f-lbl">Platform</div><a class="f-lnk" href="#" onclick="showPage('features');return false">Features</a><a class="f-lnk" href="#" onclick="showPage('tutorials');return false">Tutorials</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Supported trades</a><a class="f-lnk" href="#" onclick="showPage('pricing');return false">Pricing</a><a class="f-lnk" href="#" onclick="showPage('demo');return false">Request Demo</a></div>
     <div><div class="f-lbl">Trades</div><a class="f-lnk" href="#" onclick="showPage('trades');return false">Electrical</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Mechanical</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Plumbing</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Fire Alarm</a></div>
     <div><div class="f-lbl">Company</div><a class="f-lnk" href="#" onclick="showPage('faq');return false">FAQ</a><a class="f-lnk" href="#" onclick="showPage('contact');return false">Contact</a><a class="f-lnk" href="mailto:info@realcostestimating.ca">Email us</a></div>
     <div><div class="f-lbl">Contact</div><a class="f-lnk" href="tel:6476778399">(647) 677-8399</a><a class="f-lnk" href="mailto:info@realcostestimating.ca">info@realcostestimating.ca</a><div class="f-lnk" style="cursor:default">Toronto, Ontario 🇨🇦</div></div>
@@ -890,7 +1161,7 @@ body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased
 </div>
 
 <script>
-const PAGES=['home','features','trades','pricing','faq','contact'];
+const PAGES=['home','demo','features','tutorials','trades','pricing','faq','contact'];
 function showPage(p,push=true){
   if(!PAGES.includes(p))p='home';
   PAGES.forEach(id=>{
@@ -910,7 +1181,7 @@ window.addEventListener('popstate',e=>{
 });
 document.addEventListener('DOMContentLoaded',()=>{
   const tpl=document.getElementById('footer-tpl').innerHTML;
-  ['footer-home','footer-features','footer-trades','footer-pricing','footer-faq','footer-contact'].forEach(id=>{
+  ['footer-home','footer-demo','footer-tutorials','footer-features','footer-trades','footer-pricing','footer-faq','footer-contact'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.innerHTML=tpl;
   });
@@ -965,16 +1236,16 @@ window.addEventListener('resize',()=>revUpdate(false));
 
 // Chatbot
 const BA={
-  trial:["✅ Start your 14-day free trial — no credit card required. Click 'Open the App' at the top of the page, or go to d3jt1vpskh0hbe.cloudfront.net/"],
+  trial:["✅ Start your 14-day free trial — no credit card required. Click 'Request Demo' at the top of the page to request a demo."],
   pricing:["💰 Real Cost is $10/user/month or $80/user/year (save 33%). 14-day free trial included, no card needed."],
   features:["🔍 Key features: Digital Takeoff Canvas (upload PDF drawings), Auto-Count (find symbols across all pages instantly), Bid Page (material, labour, overhead, duration), Canadian city pricing (L1/L2/L3), Supplier RFQs, one-click Quote Letter, Estimate Graph, and Team Management."],
-  autocount:["🤖 Auto-Count: draw a rectangle around any symbol on your drawing — Real Cost uses pattern matching to find and count all matching assemblies across every page of your drawing set, instantly. No manual clicking."],
+  autocount:["Auto-Count: draw a rectangle around any symbol on your drawing — Real Cost finds and counts all matching assemblies across every page of your drawing set, instantly. No manual clicking."],
   bidpage:["💰 The Bid Page auto-calculates material costs, labour hours, overhead, markup, and project duration from your takeoff counts. Everything updates live as you make changes."],
   quote:["📋 Once your bid is done, one click generates a professional branded PDF or Word quote letter — ready to send to your client immediately."],
   trades:["🏗 Real Cost supports: Electrical, Mechanical/HVAC, Plumbing, Fire Alarm, Voice & Data, Security, Audio/Visual, Heat Tracing, and Mechanical Control."],
   pricing_can:["📍 Material rates auto-adjust to your city's regional pricing tier (L1/L2/L3) — covering Toronto, Ottawa, Montreal, Calgary, Vancouver, Quebec and more."],
   contact:["📞 (647) 677-8399 · info@realcostestimating.ca · Toronto, Ontario · Mon–Fri 9AM–6PM ET"],
-  default:["👋 Hi! I can help with anything about Real Cost — features, pricing, how the AI works, or how to get started. What would you like to know?"]
+  default:["👋 Hi! I can help with anything about Real Cost — features, pricing, workflows, or how to get started. What would you like to know?"]
 };
 const QRS=[["🚀 Free trial","trial"],["💰 Pricing","pricing"],["🔍 Auto-count","autocount"],["🏗 Trades","trades"],["📞 Contact","contact"]];
 let co=false;
