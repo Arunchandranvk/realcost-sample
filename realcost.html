@@ -1,0 +1,1005 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Real Cost — Digital Estimation Platform for Trades</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --sap:#0F2557;--sap2:#1E3A7B;--sap3:#2A508F;
+  --gold:#C9A84C;--gold2:#DFC06A;--gold3:#F0D98A;
+  --n:#0A1428;--surf:#0F1E3A;--card:#162244;--card2:#1C2C52;
+  --blue:var(--sap);--blight:#EAF0FF;--bdim:rgba(15,37,87,.14);
+  --red:#B03030;--red2:#D04040;--rlight:#FDEAEA;
+  --green:#1A5C3A;--gn2:#22754A;--gnlight:#E4F5EC;
+  --white:#F8F9FF;--muted:#7A84A0;--bd:rgba(255,255,255,.07);
+  --bdl:#DCE2F0;--dark:var(--n);--txt:#0E1830;
+  --grd-sap:linear-gradient(135deg,#0F2557 0%,#1E3A7B 100%);
+  --grd-gold:linear-gradient(135deg,#C9A84C 0%,#E0C06A 100%);
+  --grd-hero:linear-gradient(135deg,#0F2557 0%,#1E3A7B 60%,#2A508F 100%);
+  --glass-bg:rgba(255,255,255,.72);
+  --glass-border:rgba(255,255,255,.55);
+  --glass-shadow:0 8px 32px rgba(15,37,87,.12);
+  --grd-blue:var(--grd-sap);
+}
+*{font-family:'Plus Jakarta Sans',sans-serif!important;box-sizing:border-box;margin:0;padding:0}
+body{background:var(--white);color:var(--txt);-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#EEF2FF}::-webkit-scrollbar-thumb{background:var(--sap);border-radius:3px}
+
+/* NAV */
+.rc-nav{
+  background:rgba(248,249,255,.94);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);
+  height:68px;position:sticky;top:0;z-index:999;border-bottom:1px solid rgba(220,226,240,.8);
+  display:flex;align-items:center;padding:0 80px;gap:0;box-shadow:0 2px 28px rgba(15,37,87,.07);
+}
+.nav-brand{display:flex;align-items:center;gap:10px;margin-right:36px;text-decoration:none;flex-shrink:0}
+.nav-brand-wordmark{display:flex;flex-direction:column;line-height:1.1}
+.nav-brand-wordmark span:first-child{font-size:13px;font-weight:800;color:var(--sap);letter-spacing:.1em;text-transform:uppercase}
+.nav-brand-wordmark span:last-child{font-size:9.5px;font-weight:400;color:#9AA0B0;letter-spacing:.1em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1}
+.nl{padding:7px 15px;border-radius:7px;font-size:13px;font-weight:400;color:#4A5570;cursor:pointer;transition:all .2s;border:none;background:none;white-space:nowrap;letter-spacing:-.01em}
+.nl:hover{color:var(--sap);background:rgba(15,37,87,.07)}
+.nl.active{color:var(--sap);background:rgba(15,37,87,.08);font-weight:600}
+.nl.active{position:relative}
+.nl.active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:24px;height:2px;background:var(--gold);border-radius:2px}
+.nav-cta{
+  background:var(--grd-sap);color:#fff;border:none;
+  padding:9px 22px;border-radius:7px;font-size:13px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:7px;
+  letter-spacing:.01em;white-space:nowrap;flex-shrink:0;
+  box-shadow:0 4px 18px rgba(15,37,87,.28);transition:all .22s;
+  position:relative;overflow:hidden;text-decoration:none;
+}
+.nav-cta::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.22) 0%,transparent 60%);pointer-events:none}
+.nav-cta:hover{box-shadow:0 6px 26px rgba(15,37,87,.42);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:calc(100vh - 68px);position:relative;overflow:hidden;display:flex;align-items:stretch;}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;}
+.hero-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(105deg,rgba(10,20,40,.86) 0%,rgba(15,37,87,.70) 42%,rgba(15,37,87,.28) 75%,rgba(10,20,40,.12) 100%),linear-gradient(to bottom,rgba(10,20,40,.20) 0%,transparent 50%,rgba(10,20,40,.40) 100%);}
+.hero-tint{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 55% 80% at 0% 55%,rgba(201,168,76,.12) 0%,transparent 60%),radial-gradient(ellipse 40% 50% at 85% 15%,rgba(15,37,87,.08) 0%,transparent 55%);}
+.hero-grid{position:absolute;inset:0;z-index:3;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:54px 54px;}
+.hero-inner{position:relative;z-index:4;width:100%;padding:60px 80px;display:flex;align-items:center;gap:72px;}
+.hero-left{flex:1;max-width:560px}
+.hero-badge{display:inline-flex;align-items:center;gap:9px;background:rgba(201,168,76,.18);border:1px solid rgba(201,168,76,.38);color:#F0D98A;font-size:11px;font-weight:500;padding:7px 16px;border-radius:24px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:30px;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold2);animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 8px var(--gold)}50%{opacity:.3;box-shadow:none}}
+.hero-h1{font-size:60px;font-weight:800;color:#FFFFFF;line-height:1.03;letter-spacing:-2.5px;margin-bottom:22px;}
+.hero-h1 em{font-style:normal;background:linear-gradient(125deg,#C9A84C 0%,#F0D98A 55%,#DFC06A 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:15.5px;color:rgba(220,228,248,.72);line-height:1.85;max-width:480px;margin-bottom:40px;font-weight:300}
+.hero-sub strong{color:rgba(240,217,138,.9);font-weight:500}
+.hero-btns{display:flex;gap:14px;margin-bottom:48px;flex-wrap:wrap}
+.btn-prim{background:var(--grd-gold);color:#0A1428;border:none;padding:13px 28px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 22px rgba(201,168,76,.45);transition:all .22s;letter-spacing:-.01em;text-decoration:none;}
+.btn-prim:hover{box-shadow:0 10px 30px rgba(201,168,76,.60);transform:translateY(-2px)}
+.btn-ghost{background:rgba(255,255,255,.12);color:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.28);padding:13px 28px;border-radius:9px;font-size:14px;font-weight:400;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .22s;backdrop-filter:blur(8px);text-decoration:none;}
+.btn-ghost:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.48);color:#fff}
+.hero-stats{display:flex;gap:0;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:14px;overflow:hidden;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 8px 32px rgba(10,20,40,.22);}
+.hs{flex:1;padding:18px 22px;text-align:center;border-right:1px solid rgba(255,255,255,.14);position:relative;transition:background .2s}
+.hs:last-child{border-right:none}
+.hs:hover{background:rgba(255,255,255,.1)}
+.hs-n{font-size:24px;font-weight:800;color:#fff;letter-spacing:-1px}
+.hs-l{font-size:10.5px;color:rgba(220,228,248,.55);margin-top:4px;font-weight:400;letter-spacing:.05em;text-transform:uppercase}
+.hs-accent{position:absolute;top:0;left:0;right:0;height:2px}
+.hero-right{flex:1;max-width:580px;position:relative}
+.mon-halo{position:absolute;inset:-40px;background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(45,107,228,.16) 0%,transparent 65%);pointer-events:none;z-index:0;border-radius:30px}
+.monitor{background:#0A0E1A;border:1px solid rgba(255,255,255,.09);border-radius:16px 16px 4px 4px;overflow:hidden;position:relative;z-index:1;box-shadow:0 40px 80px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.04)}
+.mon-bar{background:linear-gradient(180deg,#1A2039,#0D1225);padding:10px 16px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(255,255,255,.06)}
+.wdot{width:10px;height:10px;border-radius:50%}
+.mon-url{flex:1;background:rgba(255,255,255,.04);border-radius:5px;padding:3px 12px;font-size:10px;color:rgba(255,255,255,.2);text-align:center;margin:0 12px}
+.mon-tabs{display:flex;background:#080C18;border-bottom:1px solid rgba(255,255,255,.05)}
+.mt{flex:1;font-size:11px;font-weight:500;padding:10px 5px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.3);border-bottom:2px solid transparent;transition:all .18s}
+.mt.on{color:#C9A84C;border-bottom-color:var(--gold);background:rgba(201,168,76,.08)}
+
+/* TRUST */
+.trust{background:#F0F3FD;border-top:1px solid #D8DFF0;border-bottom:1px solid #D8DFF0;padding:16px 80px;display:flex;align-items:center;justify-content:space-between;gap:32px}
+.trust-label{font-size:10.5px;font-weight:500;color:#A0AABB;text-transform:uppercase;letter-spacing:.1em;white-space:nowrap}
+.trust-badges{display:flex;gap:10px}
+.tb{display:flex;align-items:center;gap:8px;padding:8px 16px;background:#fff;border:1px solid var(--bdl);border-radius:8px;white-space:nowrap;box-shadow:0 1px 4px rgba(26,31,46,.05)}
+.tb-star{color:#E8BB5A;font-size:12px}
+.tb-name{font-size:11.5px;font-weight:600;color:var(--txt)}
+.tb-score{font-size:10px;color:#8A92A6}
+.trust-clients{display:flex;gap:32px;align-items:center}
+.tc-name{font-size:10.5px;font-weight:600;color:#C8D0E0;letter-spacing:.12em;text-transform:uppercase}
+
+/* SECTIONS */
+.sec-light{padding:96px 0;background:#F8F9FF}
+.sec-grey{padding:96px 0;background:#EEF1FA}
+.sec-dark{padding:96px 0;background:var(--surf)}
+.cxl{max-width:1280px;margin:0 auto;padding:0 80px}
+.sec-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:10.5px;font-weight:700;color:var(--sap);text-transform:uppercase;letter-spacing:.16em;margin-bottom:14px}
+.sec-eyebrow::before{content:'';width:18px;height:1.5px;background:var(--gold);border-radius:2px;display:inline-block}
+.sec-eyebrow.gold{color:var(--gold)}
+.sec-eyebrow.gold::before{background:var(--gold)}
+.sec-h2{font-size:40px;font-weight:800;color:var(--txt);letter-spacing:-1.5px;line-height:1.1;margin-bottom:14px}
+.sec-h2.inv{color:#fff}
+.sec-sub{font-size:15px;color:#6B7489;line-height:1.82;font-weight:300}
+.ph-title{font-size:46px;font-weight:800;color:var(--txt);letter-spacing:-2px;line-height:1.08;margin-bottom:14px}
+.pg-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.1);color:var(--sap);font-size:10.5px;font-weight:700;padding:6px 18px;border-radius:20px;border:1px solid rgba(201,168,76,.3);letter-spacing:.09em;text-transform:uppercase;margin-bottom:18px}
+
+/* CARDS */
+.feat-card{background:rgba(255,255,255,.82);border:1px solid rgba(220,226,240,.9);border-radius:18px;padding:30px;position:relative;overflow:hidden;transition:all .30s;height:100%;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 2px 12px rgba(15,37,87,.06);}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--grd-sap))}
+.feat-card::after{content:'';position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at 20% 0%,rgba(201,168,76,.07) 0%,transparent 60%);transition:opacity .30s;pointer-events:none}
+.feat-card:hover{transform:translateY(-7px);box-shadow:0 28px 56px rgba(15,37,87,.13);border-color:rgba(201,168,76,.35)}
+.feat-card:hover::after{opacity:1}
+.card-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px}
+.card-ttl{font-size:16px;font-weight:700;color:var(--txt);margin-bottom:9px;letter-spacing:-.3px}
+.card-body{font-size:13px;color:#6B7489;line-height:1.78;font-weight:300}
+.sv-card{background:rgba(255,255,255,.85);border:1px solid rgba(220,226,240,.9);border-radius:14px;padding:22px;transition:all .22s;display:flex;align-items:flex-start;gap:16px;height:100%;backdrop-filter:blur(6px);}
+.sv-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(15,37,87,.11);border-color:rgba(201,168,76,.4)}
+.sv-ico{width:46px;height:46px;border-radius:12px;background:rgba(201,168,76,.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.why-card{background:rgba(255,255,255,.82);border:1px solid rgba(220,226,240,.9);border-radius:16px;padding:30px;transition:all .28s;text-align:center;height:100%;backdrop-filter:blur(6px);}
+.why-card:hover{transform:translateY(-6px);box-shadow:0 22px 44px rgba(15,37,87,.12);border-color:rgba(201,168,76,.4)}
+.why-ico{font-size:36px;margin-bottom:14px}
+.stat-card{background:rgba(255,255,255,.85);border:1px solid rgba(220,226,240,.9);border-radius:14px;padding:28px;text-align:center;backdrop-filter:blur(6px);box-shadow:0 2px 12px rgba(15,37,87,.06)}
+.stat-n{font-size:38px;font-weight:800;color:var(--sap);letter-spacing:-1.5px;margin-bottom:6px}
+.stat-l{font-size:13px;color:#6B7489;font-weight:400}
+.step-card{background:#fff;border:1px solid var(--bdl);border-radius:16px;padding:26px;transition:all .22s;position:relative}
+.step-card:hover{box-shadow:0 12px 28px rgba(26,31,46,.09);border-color:#B8C8EF}
+.step-n{width:36px;height:36px;border-radius:50%;background:var(--grd-sap);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:16px;flex-shrink:0;box-shadow:0 4px 14px rgba(15,37,87,.30);border:1.5px solid rgba(201,168,76,.35)}
+.tcard{background:rgba(255,255,255,.85);border:1px solid rgba(220,226,240,.9);border-radius:18px;padding:30px;height:100%;display:flex;flex-direction:column;justify-content:space-between;transition:all .26s;backdrop-filter:blur(8px);}
+.tcard:hover{transform:translateY(-6px);box-shadow:0 24px 48px rgba(15,37,87,.12);border-color:rgba(201,168,76,.35)}
+.tcard-dark{background:linear-gradient(135deg,rgba(15,37,87,.06) 0%,rgba(30,58,123,.09) 100%);border:1px solid rgba(15,37,87,.14)}
+.tcard-dark:hover{background:linear-gradient(135deg,rgba(15,37,87,.1) 0%,rgba(30,58,123,.13) 100%)}
+.tc-stars{color:var(--gold);font-size:14px;letter-spacing:4px;margin-bottom:16px}
+.tc-q{font-size:14px;color:#4A5166;line-height:1.82;font-style:italic;margin-bottom:22px;font-weight:300}
+.tcard-dark .tc-q{color:#2A3F6A}
+.tc-foot{display:flex;align-items:center;gap:12px;padding-top:18px;border-top:1px solid #F0F3FA}
+.tcard-dark .tc-foot{border-top-color:rgba(45,107,228,.15)}
+.tc-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.cm-card{background:#fff;border:1px solid var(--bdl);border-radius:14px;padding:24px;display:flex;align-items:flex-start;gap:16px;transition:all .22s;height:100%}
+.cm-card:hover{box-shadow:0 10px 24px rgba(26,31,46,.09);border-color:#B8C8EF}
+.cm-ico{width:46px;height:46px;border-radius:12px;background:rgba(15,37,87,.08);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.faq-item{background:rgba(255,255,255,.82);border:1px solid rgba(220,226,240,.9);border-radius:12px;margin-bottom:8px;overflow:hidden;transition:all .2s;backdrop-filter:blur(6px);}
+.faq-item.open{border-color:rgba(201,168,76,.5);box-shadow:0 4px 20px rgba(15,37,87,.1);}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;cursor:pointer;transition:background .1s}
+.faq-q:hover{background:#F8FAFE}
+.faq-qt{font-size:14.5px;font-weight:500;color:var(--txt)}
+.faq-icon{width:26px;height:26px;border-radius:50%;background:rgba(15,37,87,.08);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--sap);font-weight:700;flex-shrink:0;transition:transform .22s}
+.faq-icon.open{transform:rotate(45deg);background:var(--grd-sap);color:#fff}
+.faq-a{font-size:13.5px;color:#6B7489;line-height:1.82;padding:0 24px 18px;display:none;font-weight:300}
+.faq-a.open{display:block}
+.faq-cat{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--sap);margin:32px 0 12px;display:flex;align-items:center;gap:8px}
+.faq-cat::before{content:'';width:16px;height:1.5px;background:var(--gold);border-radius:2px}
+.rc-form{background:rgba(255,255,255,.90);border:1px solid rgba(220,226,240,.85);border-radius:20px;padding:38px;box-shadow:0 4px 32px rgba(15,37,87,.08);backdrop-filter:blur(12px);}
+.flabel{font-size:12px;font-weight:500;color:#374151;margin-bottom:6px;display:block;letter-spacing:.01em}
+.finput{border:1.5px solid var(--bdl)!important;border-radius:9px!important;padding:12px 16px!important;font-size:14px!important;color:var(--txt)!important;transition:all .15s!important;width:100%!important;background:#FAFBFE!important;font-weight:300!important}
+.finput:focus{border-color:var(--sap)!important;box-shadow:0 0 0 4px rgba(15,37,87,.08)!important;outline:none!important;background:#fff!important}
+.btn-form{background:var(--grd-sap)!important;border:none!important;color:#fff!important;font-size:15px!important;font-weight:600!important;padding:14px!important;border-radius:9px!important;width:100%;letter-spacing:.01em;cursor:pointer;box-shadow:0 4px 18px rgba(15,37,87,.30)}
+.btn-form:hover{box-shadow:0 8px 26px rgba(15,37,87,.45)!important;transform:translateY(-1px)}
+.map-card{background:linear-gradient(135deg,#0A1428 0%,#0F2557 60%,#1E3A7B 100%);border-radius:18px;padding:32px;position:relative;overflow:hidden;color:#fff;border:1px solid rgba(201,168,76,.2)}
+.map-card::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(45,107,228,.06) 1px,transparent 1px);background-size:26px 26px}
+.cta-band{background:linear-gradient(135deg,#0A1428 0%,#0F2557 45%,#162E6A 100%);padding:88px 0;text-align:center;position:relative;overflow:hidden;}
+.cta-band::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.022) 1px,transparent 1px);background-size:36px 36px}
+.cta-band::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,.10) 0%,transparent 65%)}
+.btn-ol-blue{background:transparent!important;border:1.5px solid var(--sap)!important;color:var(--sap)!important;padding:11px 26px!important;border-radius:9px!important;font-size:14px!important;font-weight:600!important;cursor:pointer;transition:all .22s;text-decoration:none;display:inline-flex;align-items:center;gap:7px;}
+.btn-ol-blue:hover{background:var(--sap)!important;color:#fff!important;box-shadow:0 6px 20px rgba(15,37,87,.25)!important}
+.btn-ol-inv{background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.30)!important;color:rgba(255,255,255,.88)!important;padding:11px 26px!important;border-radius:9px!important;font-size:14px!important;font-weight:500!important;cursor:pointer;transition:all .22s;backdrop-filter:blur(6px);text-decoration:none;display:inline-flex;align-items:center;gap:7px;}
+.btn-ol-inv:hover{background:rgba(255,255,255,.22)!important;border-color:rgba(255,255,255,.50)!important;color:#fff!important}
+.gold-divider{width:48px;height:2.5px;background:var(--grd-gold);border-radius:2px;margin:0 auto 20px}
+.page-hero{background:linear-gradient(160deg,#E8EDF8 0%,#DDE5F5 40%,#E2EAF7 75%,#E6EDF8 100%);min-height:calc(100vh - 68px);display:flex;align-items:center;border-bottom:1px solid rgba(15,37,87,.10);text-align:center;position:relative;overflow:hidden;padding:60px 0;}
+.page-hero::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(15,37,87,.05) 1px,transparent 1px);background-size:30px 30px;}
+.page-hero::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 5% 15%,rgba(201,168,76,.11) 0%,transparent 55%),radial-gradient(ellipse 55% 65% at 95% 85%,rgba(15,37,87,.09) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 52% 4%,rgba(45,107,228,.08) 0%,transparent 55%);}
+.page-hero>.cxl{position:relative;z-index:1;width:100%;}
+.page-hero .btn-ghost{background:rgba(15,37,87,.07)!important;border-color:rgba(15,37,87,.18)!important;color:var(--sap)!important;backdrop-filter:none!important}
+.page-hero .btn-ghost:hover{background:rgba(15,37,87,.13)!important;border-color:rgba(15,37,87,.28)!important}
+.page-hero-accent{position:absolute;top:0;left:0;right:0;height:2.5px;background:linear-gradient(90deg,transparent 0%,rgba(201,168,76,.45) 28%,rgba(201,168,76,.85) 50%,rgba(201,168,76,.45) 72%,transparent 100%);z-index:2;pointer-events:none}
+.ph-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.88);border:1px solid rgba(15,37,87,.10);color:#374151;padding:10px 20px;border-radius:11px;font-size:13px;font-weight:400;transition:all .18s;box-shadow:0 1px 4px rgba(15,37,87,.06)}
+.ph-chip:hover{background:#fff;border-color:rgba(15,37,87,.18);box-shadow:0 3px 12px rgba(15,37,87,.1)}
+.ph-chip-gold{background:rgba(201,168,76,.10);border-color:rgba(201,168,76,.32);color:var(--sap);box-shadow:none}
+.ph-chip-gold:hover{background:rgba(201,168,76,.16);border-color:rgba(201,168,76,.45)}
+.ph-stat-row{display:flex;gap:0;max-width:680px;margin:0 auto;background:rgba(255,255,255,.82);border:1px solid rgba(15,37,87,.09);border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(15,37,87,.08)}
+.ph-stat{flex:1;padding:20px 14px;border-right:1px solid rgba(15,37,87,.07);text-align:center}
+.ph-stat:last-child{border-right:none}
+.ph-stat-n{font-size:28px;font-weight:800;color:var(--sap);letter-spacing:-1px;line-height:1}
+.ph-stat-l{font-size:10px;color:#8A92A6;margin-top:5px;text-transform:uppercase;letter-spacing:.09em}
+
+/* FOOTER */
+.rc-footer{background:linear-gradient(160deg,#0A1428 0%,#0F2050 100%);border-top:1px solid rgba(201,168,76,.18)}
+.f-lbl{font-size:10px;font-weight:700;color:rgba(201,168,76,.65);text-transform:uppercase;letter-spacing:.14em;margin-bottom:16px}
+.f-lnk{font-size:13px;color:rgba(200,210,240,.42);display:block;margin-bottom:9px;cursor:pointer;transition:color .15s;text-decoration:none;font-weight:300}
+.f-lnk:hover{color:var(--gold2)}
+.f-badge{display:flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px}
+
+/* CHAT FAB */
+.cfab{position:fixed;bottom:26px;right:26px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.cbtn{width:56px;height:56px;border-radius:50%;background:var(--grd-sap);border:2px solid rgba(201,168,76,.35);cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(15,37,87,.45);transition:transform .15s}
+.cbtn:hover{transform:scale(1.08)}
+.cwin{width:330px;background:#fff;border:1px solid var(--bdl);border-radius:20px;overflow:hidden;display:none;box-shadow:0 20px 56px rgba(10,14,28,.18)}
+.cwin.open{display:flex;flex-direction:column}
+.chdr{background:linear-gradient(135deg,#0F2557,#1E3A7B);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,.2)}
+.cbody{padding:14px;max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;min-height:130px;background:#F8FAFE}
+.mbot{background:rgba(15,37,87,.07);color:var(--txt);padding:10px 14px;border-radius:4px 14px 14px 14px;font-size:12px;line-height:1.6;max-width:86%;align-self:flex-start;border:1px solid rgba(15,37,87,.12)}
+.musr{background:var(--grd-sap);color:#fff;padding:10px 14px;border-radius:14px 4px 14px 14px;font-size:12px;line-height:1.6;max-width:86%;align-self:flex-end}
+.cqrs{display:flex;flex-wrap:wrap;gap:5px;padding:8px 14px;background:#fff;border-top:1px solid #F0F3FA}
+.cqr{font-size:10px;padding:5px 12px;border-radius:18px;border:1px solid var(--bdl);background:#fff;cursor:pointer;color:var(--txt);font-weight:400;transition:all .12s}
+.cqr:hover{background:var(--blight);color:var(--blue);border-color:rgba(45,107,228,.3)}
+.cinrow{display:flex;gap:7px;padding:11px 14px;border-top:1px solid #F0F3FA;background:#fff}
+.cinrow input{flex:1;padding:9px 13px;font-size:12px;border-radius:9px;border:1.5px solid var(--bdl);outline:none;background:#FAFBFE;transition:border-color .15s}
+.cinrow input:focus{border-color:var(--blue)}
+.csend{width:38px;height:38px;border-radius:9px;background:var(--grd-sap);color:#fff;border:none;cursor:pointer;font-size:16px;flex-shrink:0}
+.page-enter{animation:fadeUp .4s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.pricing-featured{border:2px solid var(--blue)!important;box-shadow:0 16px 48px rgba(45,107,228,.15)!important}
+.pricing-featured::before{background:var(--grd-blue)!important}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="rc-nav">
+  <a class="nav-brand" href="#" onclick="showPage('home');return false">
+    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=72&h=72&fit=crop&crop=center&q=80" width="36" height="36" alt="Real Cost" style="border-radius:8px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 8px rgba(15,37,87,.18)"/>
+    <div class="nav-brand-wordmark"><span>Real Cost</span><span>Estimation Platform</span></div>
+  </a>
+  <div class="nav-links">
+    <button class="nl active" id="nl-home" onclick="showPage('home')">Home</button>
+    <button class="nl" id="nl-features" onclick="showPage('features')">Features</button>
+    <button class="nl" id="nl-trades" onclick="showPage('trades')">Trades</button>
+    <button class="nl" id="nl-pricing" onclick="showPage('pricing')">Pricing</button>
+    <button class="nl" id="nl-faq" onclick="showPage('faq')">FAQ</button>
+    <button class="nl" id="nl-contact" onclick="showPage('contact')">Contact</button>
+  </div>
+  <a class="nav-cta" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Open the App →</a>
+</nav>
+
+<!-- ══════════ PAGE: HOME ══════════ -->
+<div id="pg-home">
+<section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=80&auto=format&fit=crop">
+    <source src="https://videos.pexels.com/video-files/3209828/3209828-uhd_2560_1440_25fps.mp4" type="video/mp4"/>
+    <source src="https://videos.pexels.com/video-files/1448735/1448735-uhd_2560_1440_24fps.mp4" type="video/mp4"/>
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-tint"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge"><div class="badge-dot"></div>Digital Estimation Platform · Canada</div>
+      <h1 class="hero-h1">Do your own<br>estimates.<br><em>Faster &amp; smarter.</em></h1>
+      <p class="hero-sub">Real Cost is a <strong>SaaS estimation platform</strong> for trade contractors. Upload your drawings, let count symbols , build your bid, and generate a quote letter — all in one place.</p>
+      <div class="hero-btns">
+        <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Open the App →</a>
+        <button class="btn-ghost" onclick="showPage('features')">▶ See all features</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-accent" style="background:var(--grd-blue)"></div><div class="hs-n">9+</div><div class="hs-l">Trades Supported</div></div>
+        <div class="hs"><div class="hs-accent" style="background:var(--grd-gold)"></div><div class="hs-n"></div><div class="hs-l">Auto-Count</div></div>
+        <div class="hs"><div class="hs-accent" style="background:linear-gradient(90deg,var(--red),var(--red2))"></div><div class="hs-n">$10</div><div class="hs-l">Per User/Mo</div></div>
+        <div class="hs"><div class="hs-accent" style="background:linear-gradient(90deg,#1A6B45,#2E8A5A)"></div><div class="hs-n">14d</div><div class="hs-l">Free Trial</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="mon-halo"></div>
+      <div class="monitor">
+        <div class="mon-bar">
+          <div class="wdot" style="background:#FF5F57"></div>
+          <div class="wdot" style="background:#FFBD2E"></div>
+          <div class="wdot" style="background:#28C840"></div>
+          <div class="mon-url">d3jt1vpskh0hbe.cloudfront.net / project / estimate</div>
+        </div>
+        <div class="mon-tabs">
+          <button class="mt on" onclick="sT(0,this)">🗺 Takeoff Canvas</button>
+          <button class="mt" onclick="sT(1,this)">💰 Bid Page</button>
+          <button class="mt" onclick="sT(2,this)">📄 Quote Letter</button>
+        </div>
+        <!-- Tab 0: Takeoff Canvas -->
+        <div id="t0" style="padding:14px;background:#F2F4FC">
+          <div style="border:1px solid #DDE3F0;border-radius:10px;overflow:hidden">
+            <svg width="100%" height="230" viewBox="0 0 640 230" preserveAspectRatio="xMidYMid slice">
+              <defs><pattern id="gr" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#C7C2F5" stroke-width=".4"/></pattern></defs>
+              <rect width="640" height="230" fill="#EEF2FD"/><rect width="640" height="230" fill="url(#gr)"/>
+              <rect x="20" y="18" width="162" height="104" fill="rgba(45,107,228,.04)" stroke="#2D6BE4" stroke-width="1.4" rx="3"/>
+              <rect x="202" y="18" width="120" height="76" fill="rgba(45,107,228,.04)" stroke="#2D6BE4" stroke-width="1.4" rx="3"/>
+              <rect x="342" y="18" width="168" height="104" fill="rgba(45,107,228,.04)" stroke="#2D6BE4" stroke-width="1.4" rx="3"/>
+              <rect x="20" y="136" width="490" height="80" fill="rgba(45,107,228,.04)" stroke="#2D6BE4" stroke-width="1.4" rx="3"/>
+              <text x="101" y="75" text-anchor="middle" font-size="11" fill="#2D6BE4" font-weight="600">ROOM A</text>
+              <text x="262" y="62" text-anchor="middle" font-size="11" fill="#2D6BE4" font-weight="600">ROOM B</text>
+              <text x="426" y="75" text-anchor="middle" font-size="11" fill="#2D6BE4" font-weight="600">ROOM C</text>
+              <text x="265" y="178" text-anchor="middle" font-size="11" fill="#2D6BE4" font-weight="600">CORRIDOR</text>
+              <rect x="30" y="28" width="60" height="48" fill="rgba(200,155,60,.08)" stroke="#C89B3C" stroke-width="1.4" stroke-dasharray="5,3" rx="3"/>
+              <circle cx="50" cy="44" r="7" fill="#2D6BE4" opacity=".85"/><circle cx="74" cy="44" r="7" fill="#2D6BE4" opacity=".85"/>
+              <circle cx="50" cy="66" r="7" fill="#2D6BE4" opacity=".85"/><circle cx="74" cy="66" r="7" fill="#2D6BE4" opacity=".85"/>
+              <circle cx="148" cy="42" r="6" fill="#2D6BE4" opacity=".55"/><circle cx="175" cy="42" r="6" fill="#2D6BE4" opacity=".55"/>
+              <circle cx="222" cy="34" r="6" fill="#2D6BE4" opacity=".55"/><circle cx="280" cy="34" r="6" fill="#2D6BE4" opacity=".55"/>
+              <circle cx="360" cy="40" r="6" fill="#2D6BE4" opacity=".55"/><circle cx="400" cy="40" r="6" fill="#2D6BE4" opacity=".55"/><circle cx="460" cy="40" r="6" fill="#2D6BE4" opacity=".55"/>
+              <polygon points="83,147 91,162 75,162" fill="#C89B3C" opacity=".9"/><polygon points="172,147 180,162 164,162" fill="#C89B3C" opacity=".9"/>
+              <polygon points="265,147 273,162 257,162" fill="#C89B3C" opacity=".9"/><polygon points="400,147 408,162 392,162" fill="#C89B3C" opacity=".9"/>
+              <rect x="408" y="106" width="146" height="104" rx="8" fill="white" stroke="#DDE3F0" stroke-width="1"/>
+              <text x="420" y="126" font-size="11" font-weight="700" fill="#0B0F1C">Symbol detected</text>
+              <line x1="408" y1="133" x2="554" y2="133" stroke="#E3E8F4" stroke-width="1"/>
+              <circle cx="420" cy="148" r="6" fill="#2D6BE4"/><text x="430" y="152" font-size="10" fill="#374151">Light 2×2  ×11</text>
+              <circle cx="420" cy="165" r="6" fill="#2D6BE4" opacity=".5"/><text x="430" y="169" font-size="10" fill="#374151">Pot light  ×7</text>
+              <polygon points="419,176 424,186 414,186" fill="#C89B3C"/><text x="430" y="185" font-size="10" fill="#374151">Outlet  ×5</text>
+            </svg>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:#EBF1FD;border:1px solid rgba(45,107,228,.2);border-radius:8px;padding:10px 14px;font-size:11px;color:#2D6BE4;font-weight:500;margin-top:10px">✦ Auto-count found 23 matching assemblies across 3 pages instantly</div>
+        </div>
+        <!-- Tab 1: Bid Page -->
+        <div id="t1" style="display:none;padding:14px;background:#F2F4FC">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+            <div style="background:#fff;border:1px solid #E3E8F4;border-radius:10px;padding:14px"><div style="font-size:10px;color:#8A92A6;margin-bottom:3px">Material total</div><div style="font-size:21px;font-weight:700;color:#0B0F1C">$158,468</div></div>
+            <div style="background:#fff;border:1px solid #E3E8F4;border-radius:10px;padding:14px"><div style="font-size:10px;color:#8A92A6;margin-bottom:3px">Labour total</div><div style="font-size:21px;font-weight:700;color:#0B0F1C">$182,633</div></div>
+            <div style="background:#fff;border:1px solid #E3E8F4;border-radius:10px;padding:14px"><div style="font-size:10px;color:#8A92A6;margin-bottom:3px">Overhead 15%</div><div style="font-size:21px;font-weight:700;color:#0B0F1C">$51,165</div></div>
+            <div style="background:var(--grd-sap);border-radius:10px;padding:14px;border:1px solid rgba(201,168,76,.22)"><div style="font-size:10px;color:rgba(255,255,255,.65);margin-bottom:3px">Grand total</div><div style="font-size:21px;font-weight:700;color:#fff">$392,266</div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #E3E8F4;border-radius:10px;padding:12px">
+            <div style="font-size:10px;font-weight:500;color:#8A92A6;margin-bottom:8px">Project duration calculator</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+              <div style="background:#F8FAFE;border:1px solid #E3E8F4;border-radius:8px;text-align:center;padding:8px"><div style="font-size:19px;font-weight:700;color:#0B0F1C">42</div><div style="font-size:9px;color:#8A92A6">days · 2 crew</div></div>
+              <div style="background:var(--grd-blue);border-radius:8px;text-align:center;padding:8px"><div style="font-size:19px;font-weight:700;color:#fff">21</div><div style="font-size:9px;color:rgba(255,255,255,.6)">days · 4 crew</div></div>
+              <div style="background:#F8FAFE;border:1px solid #E3E8F4;border-radius:8px;text-align:center;padding:8px"><div style="font-size:19px;font-weight:700;color:#0B0F1C">11</div><div style="font-size:9px;color:#8A92A6">days · 8 crew</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Tab 2: Quote Letter -->
+        <div id="t2" style="display:none;padding:14px;background:#F2F4FC">
+          <div style="background:#fff;border:1px solid #E3E8F4;border-radius:12px;padding:18px;margin-bottom:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--sap)">
+              <div><div style="font-size:13px;font-weight:700;color:var(--sap)">ABC Electrical Ltd.</div><div style="font-size:10px;color:#8A92A6">Bid Proposal</div></div>
+              <div style="font-size:10px;color:#8A92A6;text-align:right">Date: Jun 2, 2026<br>Ref: EST-2026-044</div>
+            </div>
+            <div style="font-size:12px;color:#374151;margin-bottom:10px;line-height:1.7"><strong>Project:</strong> Commercial Office Fit-Out, Toronto ON<br><strong>Scope:</strong> Full electrical — lighting, power, fire alarm, data</div>
+            <div style="background:#F8FAFE;border-radius:8px;padding:10px;margin-bottom:10px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#6B7489;margin-bottom:4px"><span>Material &amp; Labour</span><span>$341,101</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#6B7489;margin-bottom:4px"><span>Overhead &amp; Markup</span><span>$51,165</span></div>
+              <div style="height:1px;background:#E3E8F4;margin:6px 0"></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--sap)"><span>Total Bid Price</span><span>$392,266</span></div>
+            </div>
+            <div style="background:#E6F7EE;border:1px solid rgba(26,107,69,.2);border-radius:8px;padding:10px;text-align:center">
+              <span style="font-size:11px;color:#1A6B45;font-weight:500">✓ Quote letter generated in 1 click · Ready to send</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust strip -->
+<!-- <div class="trust">
+  <div class="trust-label">Used by trade contractors across Canada</div>
+  <div class="trust-badges">
+    <div class="tb"><span class="tb-star">★</span><div><div class="tb-name">Capterra</div><div class="tb-score">4.6 / 5</div></div></div>
+    <div class="tb"><span class="tb-star">★</span><div><div class="tb-name">GetApp</div><div class="tb-score">4.6 / 5</div></div></div>
+    <div class="tb"><span class="tb-star">★</span><div><div class="tb-name">Software Advice</div><div class="tb-score">4.6 / 5</div></div></div>
+    <div class="tb"><span style="font-size:13px">🛡</span><div><div class="tb-name">SOC 2 Ready</div><div class="tb-score">Enterprise</div></div></div>
+  </div>
+  <div class="trust-clients">
+    <span class="tc-name">Apex Electric</span>
+    <span class="tc-name">Volt Pro</span>
+    <span class="tc-name">JM Electrical</span>
+  </div>
+</div> -->
+
+<!-- What is Real Cost -->
+<section class="sec-light">
+  <div class="cxl">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center">
+      <div>
+        <div class="sec-eyebrow">What is Real Cost?</div>
+        <div class="sec-h2">Your team does the estimates.<br>Real Cost makes it fast.</div>
+        <p class="sec-sub" style="margin-bottom:20px">Real Cost is a <strong style="color:var(--txt);font-weight:600">digital estimation platform</strong> built for trade contractors. Upload your PDF drawings, automatically count symbols, build out a full bid page, and generate a branded quote letter — all without leaving the app.</p>
+        <p class="sec-sub" style="margin-bottom:32px">Whether you do electrical, mechanical, plumbing, fire alarm, or data — Real Cost gives your team the tools to produce accurate estimates faster than any spreadsheet or manual process.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Try it free →</a>
+          <button class="btn-ol-blue" onclick="showPage('features')">See all features</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="why-card"><div class="why-ico">📁</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:7px">Upload PDF Drawings</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Multi-page blueprint sets. Navigate every page on a digital canvas inside the app.</div></div>
+        <div class="why-card"><div class="why-ico">🔍</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:7px">Symbol Auto-Count</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Draw a box around a symbol — the platform finds all matches across every page instantly.</div></div>
+        <div class="why-card"><div class="why-ico">💰</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:7px">Build Your Bid</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Material, labour, overhead, markup, duration — all calculated on your bid page.</div></div>
+        <div class="why-card"><div class="why-ico">📋</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:7px">One-Click Quote Letter</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Generate a professional branded PDF quote letter ready to send to your client.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="sec-grey">
+  <div class="cxl">
+    <div style="text-align:center;margin-bottom:52px">
+      <div class="sec-eyebrow" style="justify-content:center">How it works</div>
+      <div class="sec-h2">From drawings to quote in 4 steps</div>
+      <p class="sec-sub" style="max-width:500px;margin:0 auto">Your whole estimation workflow — in one app.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+      <div class="step-card">
+        <div class="step-n">1</div>
+        <div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:7px">Upload Drawings</div>
+        <div style="font-size:12.5px;color:#6B7489;line-height:1.75;font-weight:300">Upload your PDF plan set. The app renders every page on a navigable digital takeoff canvas.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-n">2</div>
+        <div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:7px">Symbol Auto-Count</div>
+        <div style="font-size:12.5px;color:#6B7489;line-height:1.75;font-weight:300">Draw a rectangle around any symbol. The platform instantly finds and counts all matching assemblies across every page.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-n">3</div>
+        <div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:7px">Build Your Bid</div>
+        <div style="font-size:12.5px;color:#6B7489;line-height:1.75;font-weight:300">Your bid page auto-calculates material, labour, overhead, markup, and project duration from your counts.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-n" style="background:var(--grd-gold);color:#0A1428;border-color:rgba(201,168,76,.5)">4</div>
+        <div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:7px">Send Quote Letter</div>
+        <div style="font-size:12.5px;color:#6B7489;line-height:1.75;font-weight:300">One click generates a branded, professional PDF quote letter ready to submit to your client.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features preview -->
+<section class="sec-light">
+  <div class="cxl">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px;flex-wrap:wrap;gap:20px">
+      <div>
+        <div class="sec-eyebrow">Platform features</div>
+        <div class="sec-h2">Everything you need to win bids.</div>
+        <p class="sec-sub" style="max-width:440px">Built specifically for trade estimators in Canada.</p>
+      </div>
+      <button class="btn-ol-blue" onclick="showPage('features')">View all features →</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <div class="sv-card"><div class="sv-ico">🗺</div><div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:5px">Digital Takeoff Canvas</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Navigate multi-page PDF drawings on screen. Place symbols manually or let the app do it.</div></div></div>
+      <div class="sv-card"><div class="sv-ico">🔍</div><div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:5px">Symbol Auto-Count</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Box-select a reference symbol and the platform matches it across every drawing page in seconds.</div></div></div>
+      <div class="sv-card"><div class="sv-ico">📍</div><div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:5px">Canadian City Pricing</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">L1/L2/L3 tiers for Toronto, Ottawa, Montreal, Calgary, Vancouver and more.</div></div></div>
+      <div class="sv-card"><div class="sv-ico">🚚</div><div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:5px">Supplier RFQs</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Send quote requests to distributors and compare prices side-by-side in the bid page.</div></div></div>
+      <div class="sv-card"><div class="sv-ico">📊</div><div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:5px">Estimate Graph</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Visual breakdown of your bid — material, labour, overhead, and markup at a glance.</div></div></div>
+      <div class="sv-card"><div class="sv-ico">👥</div><div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:5px">Team Management</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Owner and estimator roles. Assign projects, track progress, manage your subscription.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Trades -->
+<section class="sec-grey">
+  <div class="cxl">
+    <div style="text-align:center;margin-bottom:52px">
+      <div class="sec-eyebrow" style="justify-content:center">Supported trades</div>
+      <div class="sec-h2">Built for every trade on the job.</div>
+      <p class="sec-sub" style="max-width:440px;margin:0 auto">Real Cost works for all major construction trades — not just electrical.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:960px;margin:0 auto">
+      <div class="why-card"><div class="why-ico">⚡</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:6px">Electrical</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Lighting, branch wiring, distribution, panels, feeders.</div></div>
+      <div class="why-card"><div class="why-ico">🌡</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:6px">Mechanical / HVAC</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Ductwork, equipment, piping, ventilation systems.</div></div>
+      <div class="why-card"><div class="why-ico">🔧</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:6px">Plumbing</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Fixtures, piping, drainage, water supply systems.</div></div>
+      <div class="why-card"><div class="why-ico">🚨</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:6px">Fire Alarm</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Panels, devices, annunciators, addressable systems.</div></div>
+      <div class="why-card"><div class="why-ico">📡</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:6px">Voice &amp; Data</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">Structured cabling, data outlets, telecom rooms.</div></div>
+      <div class="why-card"><div class="why-ico">🔐</div><div style="font-size:14px;font-weight:600;color:var(--txt);margin-bottom:6px">Security / AV / Heat Tracing</div><div style="font-size:13px;color:#6B7489;line-height:1.7;font-weight:300">CCTV, access control, AV, and heat tracing systems.</div></div>
+    </div>
+    <div style="text-align:center;margin-top:36px"><button class="btn-ol-blue" onclick="showPage('trades')">See all supported trades →</button></div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="sec-light">
+  <div class="cxl">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:44px;flex-wrap:wrap;gap:20px">
+      <div>
+        <div class="sec-eyebrow">What contractors say</div>
+        <div class="sec-h2">Estimators love Real Cost.</div>
+        <p class="sec-sub" style="max-width:380px;margin-top:8px">Rated 4.6/5 on Capterra, GetApp &amp; Software Advice.</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="rev-prev" onclick="revSlide(-1)" style="width:42px;height:42px;border-radius:50%;background:#fff;border:1.5px solid var(--bdl);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--sap);transition:all .2s;box-shadow:0 2px 8px rgba(15,37,87,.08)">‹</button>
+        <button id="rev-next" onclick="revSlide(1)" style="width:42px;height:42px;border-radius:50%;background:var(--grd-sap);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;transition:all .2s;box-shadow:0 4px 16px rgba(15,37,87,.28)">›</button>
+      </div>
+    </div>
+    <div id="rev-wrap" style="overflow:hidden;cursor:grab;user-select:none;-webkit-user-select:none">
+      <div id="rev-track" style="display:flex;gap:20px;will-change:transform;transition:transform .5s cubic-bezier(.25,.46,.45,.94)">
+        <div class="tcard" style="flex:0 0 calc((100% - 40px)/3);min-width:0"><div><div class="tc-stars">★★★★★</div><p class="tc-q">"I upload the PDF, draw a box around a fixture, and Real Cost finds every single one across the whole drawing set. What used to take half a day is done in 20 minutes."</p></div><div class="tc-foot"><div class="tc-av" style="background:var(--blight);color:var(--blue)">JM</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">James M.</div><div style="font-size:11px;color:#8A92A6">JM Electrical — Toronto, ON</div></div><span style="background:#E6F7EE;color:#1A6B45;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:500;margin-left:auto;white-space:nowrap">10× faster</span></div></div>
+        <div class="tcard tcard-dark" style="flex:0 0 calc((100% - 40px)/3);min-width:0"><div><div class="tc-stars">★★★★★</div><p class="tc-q">"The Canadian city-based pricing — L1/L2/L3 for Ottawa, Toronto, Montreal — is exactly what was missing from every other tool. We do our own estimates now instead of outsourcing."</p></div><div class="tc-foot"><div class="tc-av" style="background:rgba(45,107,228,.15);color:var(--blue)">SR</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">Sarah R.</div><div style="font-size:11px;color:#6B7489">Apex Electric — Ottawa, ON</div></div><span style="background:#E6F7EE;color:#1A6B45;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:500;margin-left:auto;white-space:nowrap">Self-sufficient</span></div></div>
+        <div class="tcard" style="flex:0 0 calc((100% - 40px)/3);min-width:0"><div><div class="tc-stars">★★★★★</div><p class="tc-q">"The bid page builds itself once takeoff is done. I click one button and a branded quote letter is ready to email. Our whole estimating process went from days to hours."</p></div><div class="tc-foot"><div class="tc-av" style="background:#E6F7EE;color:#1A6B45">DK</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">David K.</div><div style="font-size:11px;color:#8A92A6">Volt Pro — Montreal, QC</div></div><span style="background:#EBF1FD;color:#2D6BE4;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:500;margin-left:auto;white-space:nowrap">Days → Hours</span></div></div>
+        <div class="tcard" style="flex:0 0 calc((100% - 40px)/3);min-width:0"><div><div class="tc-stars">★★★★★</div><p class="tc-q">"Saved us roughly 40 hours a month. We run all our electrical and fire alarm estimates right inside Real Cost — one platform for the whole team."</p></div><div class="tc-foot"><div class="tc-av" style="background:#FDF6E3;color:#A07020">MT</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">Michael T.</div><div style="font-size:11px;color:#8A92A6">Bright Spark — Vancouver, BC</div></div><span style="background:#FDF6E3;color:#A07020;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:500;margin-left:auto;white-space:nowrap">40h saved/mo</span></div></div>
+        <div class="tcard tcard-dark" style="flex:0 0 calc((100% - 40px)/3);min-width:0"><div><div class="tc-stars">★★★★★</div><p class="tc-q">"Best ROI on any software we subscribe to. Real Cost pays for itself on the very first estimate — our team is faster, our bids are more accurate, and we win more work."</p></div><div class="tc-foot"><div class="tc-av" style="background:rgba(176,48,48,.12);color:var(--red)">KL</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">Karen L.</div><div style="font-size:11px;color:#6B7489">PowerPath — Calgary, AB</div></div><span style="background:#FDEAEA;color:#B03030;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:500;margin-left:auto;white-space:nowrap">Best ROI</span></div></div>
+        <div class="tcard" style="flex:0 0 calc((100% - 40px)/3);min-width:0"><div><div class="tc-stars">★★★★★</div><p class="tc-q">"We can now do accurate estimates for every trade in-house. The supplier RFQ feature lets us compare material prices before locking the bid — that alone covers the subscription cost."</p></div><div class="tc-foot"><div class="tc-av" style="background:#E6F7EE;color:#1A6B45">RH</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">Robert H.</div><div style="font-size:11px;color:#8A92A6">Elite Wiring — Edmonton, AB</div></div><span style="background:#E6F7EE;color:#1A6B45;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:500;margin-left:auto;white-space:nowrap">More trades</span></div></div>
+        <div class="tcard tcard-dark" style="flex:0 0 calc((100% - 40px)/3);min-width:0"><div><div class="tc-stars">★★★★★</div><p class="tc-q">"The quote letter output looks completely professional — our clients have no idea it was generated in seconds. The branding and format is exactly what a serious contractor should send."</p></div><div class="tc-foot"><div class="tc-av" style="background:rgba(45,107,228,.15);color:var(--blue)">PS</div><div><div style="font-size:13px;font-weight:500;color:var(--txt)">Priya S.</div><div style="font-size:11px;color:#6B7489">Horizon Electrical — Mississauga, ON</div></div><span style="background:#EBF1FD;color:#2D6BE4;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:500;margin-left:auto;white-space:nowrap">Pro quotes</span></div></div>
+      </div>
+    </div>
+    <div id="rev-dots" style="display:flex;gap:7px;justify-content:center;margin-top:28px;align-items:center"></div>
+  </div>
+</section>
+
+<!-- CTA Band -->
+<div class="cta-band">
+  <div style="position:relative;z-index:1;padding:0 80px">
+    <div class="gold-divider"></div>
+    <h2 style="font-size:42px;font-weight:800;color:#fff;letter-spacing:-1.3px;margin-bottom:14px">Ready to do faster estimates?</h2>
+    <p style="font-size:16px;color:rgba(220,228,248,.65);max-width:500px;margin:0 auto 40px;line-height:1.78;font-weight:300">14-day free trial. No credit card required. Your whole team can be estimating digitally today.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Start free trial</a>
+      <button class="btn-ol-inv" onclick="showPage('contact')">📞 Talk to us</button>
+    </div>
+  </div>
+</div>
+<div id="footer-home"></div>
+</div><!-- /home -->
+
+<!-- ══════════ PAGE: FEATURES ══════════ -->
+<div id="pg-features" style="display:none">
+<section class="page-hero">
+  <div class="page-hero-accent"></div>
+  <div class="cxl">
+    <div class="pg-badge">Platform Features</div>
+    <div class="ph-title">Every tool your estimating<br>team needs.</div>
+    <p class="sec-sub" style="max-width:560px;margin:0 auto 44px">From PDF upload to branded quote letter — Real Cost handles your full estimation workflow in one digital platform.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:36px">
+      <span class="ph-chip">🗺 Digital Takeoff Canvas</span>
+      <span class="ph-chip">🔍 Auto-Count</span>
+      <span class="ph-chip">💰 Bid Page</span>
+      <span class="ph-chip">📍 Canadian City Pricing</span>
+      <span class="ph-chip">🚚 Supplier RFQs</span>
+      <span class="ph-chip ph-chip-gold">📋 Quote Letter Generator</span>
+      <span class="ph-chip">📊 Estimate Graph</span>
+      <span class="ph-chip">👥 Team Management</span>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Open the App →</a>
+      <button class="btn-ghost" onclick="showPage('pricing')">See pricing</button>
+    </div>
+  </div>
+</section>
+<section class="sec-grey">
+  <div class="cxl">
+    <div style="text-align:center;margin-bottom:52px">
+      <div class="sec-eyebrow" style="justify-content:center">Core features</div>
+      <div class="sec-h2">Built for how estimators actually work</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <div class="feat-card" style="--card-accent:var(--grd-blue)"><div class="card-ico" style="background:var(--blight)">🗺</div><div class="card-ttl">Digital Takeoff Canvas</div><div class="card-body">Upload PDF drawing sets and navigate every page on a digital canvas. Place symbols manually or let the platform detect matching symbols. Multi-page projects supported with full page navigation.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,#1A6B45,#2E8A5A)"><div class="card-ico" style="background:#E6F7EE">🔍</div><div class="card-ttl">Symbol Auto-Count</div><div class="card-body">Draw a rectangle around any reference symbol — a light fixture, outlet, or device. The platform instantly finds and counts all matching assemblies across every drawing page.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,var(--red),var(--red2))"><div class="card-ico" style="background:var(--rlight)">💰</div><div class="card-ttl">Bid Page</div><div class="card-body">Your bid auto-calculates from takeoff counts. Material cost, labour hours, overhead percentage, markup, and a project duration calculator — all in one view.</div></div>
+      <div class="feat-card" style="--card-accent:var(--grd-gold)"><div class="card-ico" style="background:#FDF6E3">📍</div><div class="card-ttl">Canadian City-Based Pricing</div><div class="card-body">Material rates auto-adjust to L1/L2/L3 regional tiers for your city — Quebec, Ottawa, Toronto, Montreal, Calgary, Vancouver, and more.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,#0891B2,#06B6D4)"><div class="card-ico" style="background:#E0F7FA">🚚</div><div class="card-ttl">Supplier RFQs</div><div class="card-body">Send requests for quotation to your material distributors directly from the Bid Page. Compare supplier quotes side-by-side and apply the best price instantly.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,#5B21B6,#7C3AED)"><div class="card-ico" style="background:#F5F3FF">📋</div><div class="card-ttl">Quote Letter Generator</div><div class="card-body">One click generates a professional branded PDF or Word quote letter from your bid — ready to submit to your client immediately.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,#1A6B45,#2E8A5A)"><div class="card-ico" style="background:#E6F7EE">📊</div><div class="card-ttl">Estimate Graph & Analytics</div><div class="card-body">Visual breakdown chart of your estimate showing material, labour, overhead, and markup proportions. Understand your bid at a glance.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,var(--sap),var(--sap2))"><div class="card-ico" style="background:var(--blight)">👥</div><div class="card-ttl">Team & Role Management</div><div class="card-body">Owner and estimator roles. Assign projects to team members, track progress, and manage subscriptions — all from one account dashboard.</div></div>
+      <div class="feat-card" style="--card-accent:var(--grd-gold)"><div class="card-ico" style="background:#FDF6E3">🏗</div><div class="card-ttl">Multi-Trade Support</div><div class="card-body">One platform for all your trades — electrical, mechanical, plumbing, fire alarm, voice & data, security, AV, and heat tracing all supported.</div></div>
+    </div>
+  </div>
+</section>
+<div class="cta-band">
+  <div style="position:relative;z-index:1;padding:0 80px">
+    <h2 style="font-size:40px;font-weight:800;color:#fff;letter-spacing:-1.2px;margin-bottom:14px">See it all live in the app.</h2>
+    <p style="font-size:16px;color:rgba(220,228,248,.65);max-width:440px;margin:0 auto 36px;line-height:1.78;font-weight:300">14-day free trial. Every feature, no card required.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Open the App →</a>
+      <button class="btn-ol-inv" onclick="showPage('pricing')">View pricing</button>
+    </div>
+  </div>
+</div>
+<div id="footer-features"></div>
+</div><!-- /features -->
+
+<!-- ══════════ PAGE: TRADES ══════════ -->
+<div id="pg-trades" style="display:none">
+<section class="page-hero">
+  <div class="page-hero-accent"></div>
+  <div class="cxl">
+    <div class="pg-badge">Supported Trades</div>
+    <div class="ph-title">One platform.<br>Every trade.</div>
+    <p class="sec-sub" style="max-width:520px;margin:0 auto 44px">Real Cost supports all major construction trades — not just electrical. Your whole team can estimate every system from a single platform.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:36px">
+      <span class="ph-chip">⚡ Electrical</span>
+      <span class="ph-chip">🌡 Mechanical / HVAC</span>
+      <span class="ph-chip">🔧 Plumbing</span>
+      <span class="ph-chip">🚨 Fire Alarm</span>
+      <span class="ph-chip">📡 Voice &amp; Data</span>
+      <span class="ph-chip">🔐 Security</span>
+      <span class="ph-chip">🎬 Audio / Visual</span>
+      <span class="ph-chip ph-chip-gold">🌡 Heat Tracing</span>
+      <span class="ph-chip">🏭 Mechanical Control</span>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Try free for 14 days →</a>
+      <button class="btn-ghost" onclick="showPage('features')">▶ See features</button>
+    </div>
+  </div>
+</section>
+<section class="sec-grey">
+  <div class="cxl">
+    <div style="text-align:center;margin-bottom:52px">
+      <div class="sec-eyebrow" style="justify-content:center">All supported trades</div>
+      <div class="sec-h2">Estimate every system with Real Cost</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <div class="feat-card" style="--card-accent:var(--grd-blue)"><div class="card-ico" style="background:var(--blight)">⚡</div><div class="card-ttl">Electrical</div><div class="card-body">Lighting fixtures, branch wiring, distribution panels, feeders, switchgear, motor connections, and complete power system takeoffs for all project types.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,#0891B2,#06B6D4)"><div class="card-ico" style="background:#E0F7FA">🌡</div><div class="card-ttl">Mechanical / HVAC</div><div class="card-body">Ductwork, air handling units, VAV boxes, piping, ventilation, exhaust, and complete mechanical system takeoffs and estimates.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,#1A6B45,#2E8A5A)"><div class="card-ico" style="background:#E6F7EE">🔧</div><div class="card-ttl">Plumbing</div><div class="card-body">Fixtures, supply piping, drainage, sanitary systems, water service, and complete plumbing takeoffs for commercial and residential projects.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,var(--red),var(--red2))"><div class="card-ico" style="background:var(--rlight)">🚨</div><div class="card-ttl">Fire Alarm</div><div class="card-body">Addressable panels, smoke detectors, pull stations, strobe/horn devices, notification appliances, and complete fire alarm system estimates.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,#5B21B6,#7C3AED)"><div class="card-ico" style="background:#F5F3FF">📡</div><div class="card-ttl">Voice &amp; Data</div><div class="card-body">Structured cabling, data outlets, telecom rooms, patch panels, fiber infrastructure, and complete voice/data cabling estimates.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,var(--sap),var(--sap2))"><div class="card-ico" style="background:var(--blight)">🔐</div><div class="card-ttl">Security Systems</div><div class="card-body">CCTV cameras, access control, intercoms, intrusion detection, and complete security infrastructure takeoffs and estimates.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,#C026D3,#E879F9)"><div class="card-ico" style="background:#FDF4FF">🎬</div><div class="card-ttl">Audio / Visual</div><div class="card-body">Projectors, screens, speakers, amplifiers, control systems, boardroom and auditorium AV infrastructure takeoffs.</div></div>
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,var(--red),#E05A20)"><div class="card-ico" style="background:#FFF7ED">🌡</div><div class="card-ttl">Heat Tracing</div><div class="card-body">Electric heat tracing for pipes, tanks, and roofs — cable takeoffs, control panels, and circuit protection for all temperature maintenance systems.</div></div>
+      <div class="feat-card" style="--card-accent:var(--grd-gold)"><div class="card-ico" style="background:#FDF6E3">🏭</div><div class="card-ttl">Mechanical Control</div><div class="card-body">HVAC control wiring, motor connections, VFDs, MCC panels, and industrial process control system estimates.</div></div>
+    </div>
+  </div>
+</section>
+<div class="cta-band">
+  <div style="position:relative;z-index:1;padding:0 80px">
+    <h2 style="font-size:40px;font-weight:800;color:#fff;letter-spacing:-1.2px;margin-bottom:14px">Estimate every trade in one platform.</h2>
+    <p style="font-size:16px;color:rgba(220,228,248,.65);max-width:440px;margin:0 auto 36px;line-height:1.78;font-weight:300">Start your free 14-day trial and run your first estimate today.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Open the App →</a>
+      <button class="btn-ol-inv" onclick="showPage('contact')">Talk to us</button>
+    </div>
+  </div>
+</div>
+<div id="footer-trades"></div>
+</div><!-- /trades -->
+
+<!-- ══════════ PAGE: PRICING ══════════ -->
+<div id="pg-pricing" style="display:none">
+<section class="page-hero">
+  <div class="page-hero-accent"></div>
+  <div class="cxl">
+    <div class="pg-badge">Pricing</div>
+    <div class="ph-title">Simple, honest pricing.</div>
+    <p class="sec-sub" style="max-width:480px;margin:0 auto 44px">One plan. All features. No add-ons, no lock-in, no surprises. Start with a 14-day free trial — no credit card required.</p>
+    <div class="ph-stat-row" style="margin-bottom:40px">
+      <div class="ph-stat"><div class="ph-stat-n">$10</div><div class="ph-stat-l">Per user / month</div></div>
+      <div class="ph-stat"><div class="ph-stat-n">$80</div><div class="ph-stat-l">Per user / year</div></div>
+      <div class="ph-stat"><div class="ph-stat-n" style="color:var(--gold2)">33%</div><div class="ph-stat-l">Annual saving</div></div>
+      <div class="ph-stat"><div class="ph-stat-n">14d</div><div class="ph-stat-l">Free trial</div></div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Start free trial →</a>
+      <button class="btn-ghost" onclick="showPage('contact')">Any questions? Talk to us</button>
+    </div>
+  </div>
+</section>
+<section class="sec-grey">
+  <div class="cxl">
+    <div style="text-align:center;margin-bottom:52px">
+      <div class="sec-eyebrow" style="justify-content:center">Choose your plan</div>
+      <div class="sec-h2">Pay monthly or save with annual</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:760px;margin:0 auto 56px">
+      <div class="feat-card" style="--card-accent:linear-gradient(90deg,var(--bdl),var(--bdl));text-align:center;padding:40px">
+        <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#8A92A6;margin-bottom:20px">Monthly</div>
+        <div style="font-size:56px;font-weight:800;color:var(--txt);letter-spacing:-2px;margin-bottom:6px">$10</div>
+        <div style="font-size:15px;color:#8A92A6;margin-bottom:28px">per user / month</div>
+        <a class="btn-ol-blue" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener" style="width:100%;justify-content:center;">Start free trial</a>
+        <div style="font-size:12px;color:#A0AABB;margin-top:12px">14-day trial · No card required</div>
+      </div>
+      <div class="feat-card pricing-featured" style="text-align:center;padding:40px">
+        <div style="background:var(--blight);color:var(--blue);font-size:11px;font-weight:600;padding:5px 14px;border-radius:16px;display:inline-block;margin-bottom:16px;letter-spacing:.04em">BEST VALUE · SAVE 33%</div>
+        <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#8A92A6;margin-bottom:20px">Annual</div>
+        <div style="font-size:56px;font-weight:800;color:var(--txt);letter-spacing:-2px;margin-bottom:6px">$80</div>
+        <div style="font-size:15px;color:#8A92A6;margin-bottom:28px">per user / year</div>
+        <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener" style="width:100%;justify-content:center;">Start free trial</a>
+        <div style="font-size:12px;color:#A0AABB;margin-top:12px">14-day trial · No card required</div>
+      </div>
+    </div>
+    <!-- What's included -->
+    <div style="background:rgba(255,255,255,.82);border:1px solid rgba(220,226,240,.9);border-radius:18px;padding:40px;max-width:760px;margin:0 auto;backdrop-filter:blur(8px)">
+      <div style="text-align:center;margin-bottom:32px">
+        <div class="sec-eyebrow" style="justify-content:center">What's included</div>
+        <div style="font-size:22px;font-weight:700;color:var(--txt);letter-spacing:-.5px">Every feature. Every plan.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">Digital takeoff canvas (PDF upload)</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">Symbol auto-count</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">Full bid page &amp; calculator</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">Canadian city-based pricing (L1/L2/L3)</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">Supplier RFQ management</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">One-click quote letter (PDF / Word)</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">Estimate graph &amp; analytics</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">Team &amp; role management</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">All 9+ trades supported</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:#1A6B45;font-size:16px;flex-shrink:0">✓</span><span style="font-size:14px;color:#374151">Email &amp; phone support</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="footer-pricing"></div>
+</div><!-- /pricing -->
+
+<!-- ══════════ PAGE: FAQ ══════════ -->
+<div id="pg-faq" style="display:none">
+<section class="page-hero">
+  <div class="page-hero-accent"></div>
+  <div class="cxl">
+    <div class="pg-badge">FAQ</div>
+    <div class="ph-title">Frequently asked questions</div>
+    <p class="sec-sub" style="max-width:480px;margin:0 auto 44px">Everything you need to know about the Real Cost estimation platform.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:36px">
+      <span class="ph-chip">🚀 Getting started</span>
+      <span class="ph-chip">🔍 Features &amp; platform</span>
+      <span class="ph-chip">💳 Billing &amp; support</span>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-prim" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">🚀 Open the App →</a>
+      <button class="btn-ghost" onclick="showPage('contact')">Still have questions?</button>
+    </div>
+  </div>
+</section>
+<section class="sec-grey">
+  <div class="cxl" style="max-width:860px">
+    <div class="faq-cat">Getting started</div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">What is Real Cost and who is it for?</span><div class="faq-icon">+</div></div><div class="faq-a">Real Cost is a digital estimation platform for trade contractors. It lets your team upload PDF drawings, count symbols, build a full bid, and generate a professional quote letter — all without spreadsheets or outsourcing. It's designed for electrical, mechanical, plumbing, fire alarm, and other trade contractors across Canada.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">How do I start using Real Cost?</span><div class="faq-icon">+</div></div><div class="faq-a">Open the app at the link on this page. Start your 14-day free trial — no credit card required. Upload a PDF drawing set, create a project, and your team can begin estimating immediately.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">What file types can I upload?</span><div class="faq-icon">+</div></div><div class="faq-a">You can upload multi-page PDF drawing sets. The platform renders each page on a navigable digital takeoff canvas. Most standard architectural and engineering drawing exports work directly.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">Which trades are supported?</span><div class="faq-icon">+</div></div><div class="faq-a">Real Cost supports electrical, mechanical/HVAC, plumbing, fire alarm, voice & data, security systems, audio/visual, heat tracing, and mechanical control. More trades are added regularly.</div></div>
+    <div class="faq-cat">Features &amp; platform</div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">How does symbol auto-count work?</span><div class="faq-icon">+</div></div><div class="faq-a">Draw a rectangle around any reference symbol on a drawing — a light fixture, outlet, smoke detector, etc. The platform uses pattern matching to find and count all identical symbols across every page of the project drawings, instantly.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">What is the Bid Page?</span><div class="faq-icon">+</div></div><div class="faq-a">The Bid Page is where your estimate comes together. Once takeoff is done, it auto-calculates material costs, labour hours, overhead percentage, markup, and project duration for different crew sizes. All figures update live as you make changes.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">What is Canadian city-based pricing?</span><div class="faq-icon">+</div></div><div class="faq-a">Material rates in Real Cost automatically adjust based on your city's regional pricing tier. L1, L2, and L3 tiers cover cities including Quebec, Ottawa, Toronto, Montreal, Calgary, and Vancouver. This ensures your estimates reflect local market costs without manual adjustments.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">How does the quote letter generator work?</span><div class="faq-icon">+</div></div><div class="faq-a">Once your bid is complete, one click generates a professional branded PDF or Word quote letter ready to send to your client. It includes all project details, scope summary, and your total bid price in a clean, professional format.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">Can my whole team use it?</span><div class="faq-icon">+</div></div><div class="faq-a">Yes. Real Cost supports team accounts with owner and estimator roles. As the owner you can assign projects to sub-estimators, track their progress, and manage the team subscription from one dashboard. Each user is billed at $10/month or $80/year.</div></div>
+    <div class="faq-cat">Billing &amp; support</div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">How long is the free trial?</span><div class="faq-icon">+</div></div><div class="faq-a">The free trial is 14 days with full access to all platform features — no credit card required. At the end of the trial you can subscribe monthly ($10/user/month) or annually ($80/user/year, save 33%). Your data is always safe.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">What payment methods are accepted?</span><div class="faq-icon">+</div></div><div class="faq-a">Visa, Mastercard, and major debit cards via Stripe. All transactions are encrypted and secure.</div></div>
+    <div class="faq-item" onclick="tFAQ(this)"><div class="faq-q"><span class="faq-qt">How do I get support?</span><div class="faq-icon">+</div></div><div class="faq-a">Phone support at (647) 677-8399, email at info@realcostestimating.ca, and live chat on this site. Subscribers get access to video tutorials and priority support with same-day response for urgent issues.</div></div>
+  </div>
+</section>
+<section class="sec-light">
+  <div class="cxl" style="text-align:center">
+    <div class="sec-eyebrow" style="justify-content:center">Still have questions?</div>
+    <div class="sec-h2">We're happy to walk you through it.</div>
+    <p class="sec-sub" style="max-width:420px;margin:0 auto 32px">Our team responds within hours on business days.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-prim" onclick="showPage('contact')">Contact us →</button>
+      <a href="tel:6476778399" class="btn-ol-blue">📞 (647) 677-8399</a>
+    </div>
+  </div>
+</section>
+<div id="footer-faq"></div>
+</div><!-- /faq -->
+
+<!-- ══════════ PAGE: CONTACT ══════════ -->
+<div id="pg-contact" style="display:none">
+<section class="page-hero">
+  <div class="page-hero-accent"></div>
+  <div class="cxl">
+    <div class="pg-badge">Get in touch</div>
+    <div class="ph-title">Questions about<br>Real Cost?</div>
+    <p class="sec-sub" style="max-width:480px;margin:0 auto 44px">Our team in Toronto, Ontario is happy to walk you through the platform, answer questions, or help you get started.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:36px">
+      <a href="tel:6476778399" style="display:flex;align-items:center;gap:13px;background:#fff;border:1px solid rgba(15,37,87,.10);border-radius:13px;padding:16px 24px;text-decoration:none;transition:all .2s;min-width:220px;box-shadow:0 2px 12px rgba(15,37,87,.07)">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(176,48,48,.10);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📞</div>
+        <div style="text-align:left"><div style="font-size:11px;color:#8A92A6;margin-bottom:2px">Call us</div><div style="font-size:15px;font-weight:700;color:var(--txt)">(647) 677-8399</div></div>
+      </a>
+      <a href="mailto:info@realcostestimating.ca" style="display:flex;align-items:center;gap:13px;background:#fff;border:1px solid rgba(15,37,87,.10);border-radius:13px;padding:16px 24px;text-decoration:none;transition:all .2s;min-width:220px;box-shadow:0 2px 12px rgba(15,37,87,.07)">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(15,37,87,.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">✉️</div>
+        <div style="text-align:left"><div style="font-size:11px;color:#8A92A6;margin-bottom:2px">Email us</div><div style="font-size:15px;font-weight:700;color:var(--txt)">info@realcostestimating.ca</div></div>
+      </a>
+      <a href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:13px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.28);border-radius:13px;padding:16px 24px;text-decoration:none;min-width:220px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(15,37,87,.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🚀</div>
+        <div style="text-align:left"><div style="font-size:11px;color:var(--gold);font-weight:500;margin-bottom:2px">Try the app</div><div style="font-size:15px;font-weight:700;color:var(--sap)">Open Real Cost →</div></div>
+      </a>
+    </div>
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap">
+      <span style="display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:#8A92A6">🕐 Mon–Fri 9AM–6PM ET</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:#8A92A6">⚡ Same-day response</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:#8A92A6">📍 Toronto, Ontario 🇨🇦</span>
+    </div>
+  </div>
+</section>
+<section class="sec-grey">
+  <div class="cxl">
+    <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:56px">
+      <div>
+        <div class="sec-eyebrow">Reach us directly</div>
+        <div style="font-size:26px;font-weight:700;color:var(--txt);letter-spacing:-.5px;margin-bottom:28px">Contact information</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px">
+          <div class="cm-card"><div class="cm-ico" style="background:var(--rlight)">📞</div><div><div style="font-size:12px;font-weight:500;color:#8A92A6;margin-bottom:3px">Phone</div><div style="font-size:15px;font-weight:600;color:var(--txt);margin-bottom:3px">(647) 677-8399</div><div style="font-size:12px;color:var(--sap);font-weight:500">Call or WhatsApp · Mon–Fri 9AM–6PM ET</div></div></div>
+          <div class="cm-card"><div class="cm-ico">✉️</div><div><div style="font-size:12px;font-weight:500;color:#8A92A6;margin-bottom:3px">Email</div><div style="font-size:15px;font-weight:600;color:var(--txt);margin-bottom:3px">info@realcostestimating.ca</div><div style="font-size:12px;color:var(--sap);font-weight:500">Questions, demos, billing — we respond same day</div></div></div>
+        </div>
+        <div class="map-card">
+          <div style="position:relative;z-index:1">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:rgba(200,155,60,.8);margin-bottom:10px">📍 Based in</div>
+            <div style="font-size:20px;font-weight:700;color:#fff;margin-bottom:5px">Toronto, Ontario</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.78;font-weight:300">Real Cost Estimating Inc.<br>Toronto, Ontario, Canada</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="rc-form" id="contact-form-wrap">
+          <div style="font-size:18px;font-weight:700;color:var(--txt);margin-bottom:26px">Get in touch</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+            <div><label class="flabel">First name</label><input class="finput" placeholder="John"/></div>
+            <div><label class="flabel">Last name</label><input class="finput" placeholder="Smith"/></div>
+          </div>
+          <div style="margin-bottom:14px"><label class="flabel">Work email</label><input class="finput" type="email" placeholder="john@company.com"/></div>
+          <div style="margin-bottom:14px"><label class="flabel">Company name</label><input class="finput" placeholder="ABC Electrical Ltd."/></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+            <div><label class="flabel">Your trade</label><select class="finput"><option value="">Select trade</option><option>Electrical</option><option>Mechanical / HVAC</option><option>Plumbing</option><option>Fire Alarm</option><option>General contractor</option><option>Multi-trade</option></select></div>
+            <div><label class="flabel">I want to</label><select class="finput"><option value="">Select</option><option>Start a free trial</option><option>Get a platform demo</option><option>Ask a billing question</option><option>Get technical support</option></select></div>
+          </div>
+          <div style="margin-bottom:28px"><label class="flabel">Message (optional)</label><textarea class="finput" rows="4" placeholder="Any questions or context about your team..." style="resize:none"></textarea></div>
+          <button class="btn-form" onclick="submitForm()">Send message →</button>
+          <div style="margin-top:12px;text-align:center;font-size:12px;color:#A0AABB">We respond within 24 hours on business days.</div>
+        </div>
+        <div id="form-success" style="display:none" class="rc-form">
+          <div style="font-size:48px;margin-bottom:18px;text-align:center">✅</div>
+          <div style="font-size:22px;font-weight:700;color:var(--txt);margin-bottom:9px;text-align:center">Message sent!</div>
+          <div style="font-size:15px;color:#6B7489;max-width:320px;margin:0 auto 24px;line-height:1.8;text-align:center;font-weight:300">Thank you! Our team will get back to you within 24 hours.</div>
+          <div style="text-align:center"><button class="btn-ol-blue" onclick="document.getElementById('contact-form-wrap').style.display='block';document.getElementById('form-success').style.display='none'">Send another message</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="footer-contact"></div>
+</div><!-- /contact -->
+
+<!-- FOOTER TEMPLATE -->
+<template id="footer-tpl">
+<footer class="rc-footer">
+  <div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:18px 80px;border-bottom:1px solid rgba(201,168,76,.15);flex-wrap:wrap">
+    <div class="f-badge"><div style="font-size:12px;font-weight:500;color:rgba(201,168,76,.9)">★ Capterra</div><div style="font-size:9px;color:rgba(200,210,240,.35)">4.6/5</div></div>
+    <div class="f-badge"><div style="font-size:12px;font-weight:500;color:rgba(201,168,76,.9)">★ GetApp</div><div style="font-size:9px;color:rgba(200,210,240,.35)">4.6/5</div></div>
+    <div class="f-badge"><div style="font-size:12px;font-weight:500;color:rgba(201,168,76,.9)">★ Software Advice</div><div style="font-size:9px;color:rgba(200,210,240,.35)">4.6/5</div></div>
+    <div class="f-badge"><div style="font-size:12px;font-weight:500;color:rgba(201,168,76,.9)">🛡 SOC 2 Ready</div><div style="font-size:9px;color:rgba(200,210,240,.35)">Enterprise</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:32px;padding:52px 80px;max-width:1440px;margin:0 auto">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=72&h=72&fit=crop&crop=center&q=80" width="32" height="32" alt="Real Cost" style="border-radius:7px;object-fit:cover;flex-shrink:0"/>
+        <div><div style="font-size:11px;font-weight:800;color:var(--gold2);letter-spacing:.12em;text-transform:uppercase">Real Cost</div><div style="font-size:9px;font-weight:300;color:#9AA0B0;letter-spacing:.1em;text-transform:uppercase">Estimation Platform</div></div>
+      </div>
+      <p style="font-size:13px;color:rgba(200,210,240,.38);line-height:1.82;max-width:240px;font-weight:300">Digital estimation platform for trade contractors across Canada. Upload drawings, count symbols, build your bid, send your quote.</p>
+      <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+        <a href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener" style="background:var(--grd-blue);color:#fff;font-size:12px;font-weight:500;border-radius:7px;padding:8px 16px;text-decoration:none">🚀 Open App</a>
+        <a href="tel:6476778399" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-size:12px;font-weight:400;border-radius:7px;padding:8px 16px;text-decoration:none;border:1px solid rgba(255,255,255,.12)">📞 Call us</a>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+        <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);display:flex;align-items:center;justify-content:center;transition:all .18s;text-decoration:none" onmouseover="this.style.background='rgba(225,48,108,.28)';this.style.borderColor='rgba(225,48,108,.45)'" onmouseout="this.style.background='rgba(255,255,255,.07)';this.style.borderColor='rgba(255,255,255,.11)'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.65)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="rgba(255,255,255,.65)" stroke="none"/></svg>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" title="X / Twitter" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);display:flex;align-items:center;justify-content:center;transition:all .18s;text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.16)';this.style.borderColor='rgba(255,255,255,.28)'" onmouseout="this.style.background='rgba(255,255,255,.07)';this.style.borderColor='rgba(255,255,255,.11)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.65)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);display:flex;align-items:center;justify-content:center;transition:all .18s;text-decoration:none" onmouseover="this.style.background='rgba(24,119,242,.30)';this.style.borderColor='rgba(24,119,242,.50)'" onmouseout="this.style.background='rgba(255,255,255,.07)';this.style.borderColor='rgba(255,255,255,.11)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.65)"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.27h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073Z"/></svg>
+        </a>
+        <a href="https://wa.me/16476778399" target="_blank" rel="noopener" title="WhatsApp" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);display:flex;align-items:center;justify-content:center;transition:all .18s;text-decoration:none" onmouseover="this.style.background='rgba(37,211,102,.25)';this.style.borderColor='rgba(37,211,102,.45)'" onmouseout="this.style.background='rgba(255,255,255,.07)';this.style.borderColor='rgba(255,255,255,.11)'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,.65)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        </a> </div>
+    </div>
+    <div><div class="f-lbl">Platform</div><a class="f-lnk" href="#" onclick="showPage('features');return false">Features</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Supported trades</a><a class="f-lnk" href="#" onclick="showPage('pricing');return false">Pricing</a><a class="f-lnk" href="https://d3jt1vpskh0hbe.cloudfront.net/" target="_blank" rel="noopener">Open the app</a></div>
+    <div><div class="f-lbl">Trades</div><a class="f-lnk" href="#" onclick="showPage('trades');return false">Electrical</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Mechanical</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Plumbing</a><a class="f-lnk" href="#" onclick="showPage('trades');return false">Fire Alarm</a></div>
+    <div><div class="f-lbl">Company</div><a class="f-lnk" href="#" onclick="showPage('faq');return false">FAQ</a><a class="f-lnk" href="#" onclick="showPage('contact');return false">Contact</a><a class="f-lnk" href="mailto:info@realcostestimating.ca">Email us</a></div>
+    <div><div class="f-lbl">Contact</div><a class="f-lnk" href="tel:6476778399">(647) 677-8399</a><a class="f-lnk" href="mailto:info@realcostestimating.ca">info@realcostestimating.ca</a><div class="f-lnk" style="cursor:default">Toronto, Ontario 🇨🇦</div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 80px;border-top:1px solid rgba(201,168,76,.12);max-width:1440px;margin:0 auto;flex-wrap:wrap;gap:16px">
+    <div style="font-size:12px;color:rgba(200,210,240,.28);font-weight:300">© 2026 Real Cost Estimating Inc. All rights reserved. Toronto, Ontario, Canada.</div>
+    <div style="display:flex;gap:28px"><span style="font-size:12px;color:rgba(200,210,240,.28);cursor:pointer">Privacy policy</span><span style="font-size:12px;color:rgba(200,210,240,.28);cursor:pointer">Terms of use</span></div>
+  </div>
+</footer>
+</template>
+
+<!-- CHATBOT -->
+<div class="cfab">
+  <div class="cwin" id="cw">
+    <div class="chdr">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:14px">🤖</div>
+        <div><div style="font-size:13px;font-weight:500;color:#fff">Real Cost Assistant</div><div style="font-size:10px;color:rgba(255,255,255,.38);font-weight:300">Replies in seconds</div></div>
+      </div>
+      <button onclick="tc()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);font-size:20px;line-height:1">×</button>
+    </div>
+    <div class="cbody" id="cm"></div>
+    <div class="cqrs" id="qr"></div>
+    <div class="cinrow"><input id="ci" placeholder="Ask anything about Real Cost..." onkeydown="if(event.key==='Enter')sc()"/><button class="csend" onclick="sc()">➤</button></div>
+  </div>
+  <button class="cbtn" onclick="tc()">💬</button>
+</div>
+
+<script>
+const PAGES=['home','features','trades','pricing','faq','contact'];
+function showPage(p,push=true){
+  if(!PAGES.includes(p))p='home';
+  PAGES.forEach(id=>{
+    const el=document.getElementById('pg-'+id);
+    if(el){el.style.display=id===p?'block':'none';if(id===p)el.classList.add('page-enter');}
+  });
+  PAGES.forEach(id=>{
+    const nl=document.getElementById('nl-'+id);
+    if(nl)nl.classList.toggle('active',id===p);
+  });
+  if(push)history.pushState({page:p},'',p==='home'?window.location.pathname+'#home':'#'+p);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+window.addEventListener('popstate',e=>{
+  const p=(e.state&&e.state.page)||location.hash.replace('#','');
+  showPage(PAGES.includes(p)?p:'home',false);
+});
+document.addEventListener('DOMContentLoaded',()=>{
+  const tpl=document.getElementById('footer-tpl').innerHTML;
+  ['footer-home','footer-features','footer-trades','footer-pricing','footer-faq','footer-contact'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.innerHTML=tpl;
+  });
+  const hash=location.hash.replace('#','');
+  showPage(PAGES.includes(hash)?hash:'home',false);
+  setTimeout(revInit,120);
+});
+function sT(n,el){
+  [0,1,2].forEach(i=>{const p=document.getElementById('t'+i);if(p)p.style.display=i===n?'block':'none';});
+  document.querySelectorAll('.mt').forEach((t,i)=>t.classList.toggle('on',i===n));
+}
+function tFAQ(item){
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-icon').classList.remove('open');i.querySelector('.faq-a').classList.remove('open');});
+  if(!wasOpen){item.classList.add('open');item.querySelector('.faq-icon').classList.add('open');item.querySelector('.faq-a').classList.add('open');}
+}
+function submitForm(){
+  document.getElementById('contact-form-wrap').style.display='none';
+  document.getElementById('form-success').style.display='block';
+}
+
+// Carousel
+const REV_TOTAL=7,REV_VIS=3,REV_GAP=20,REV_INTERVAL=4500;
+let revIdx=0,revTimer=null,revDragStartX=0,revDragging=false,revDragMoved=false;
+function revCardWidth(){const w=document.getElementById('rev-wrap');return w?(w.offsetWidth-(REV_VIS-1)*REV_GAP)/REV_VIS:0;}
+function revMaxIdx(){return REV_TOTAL-REV_VIS;}
+function revUpdate(animate=true){
+  const track=document.getElementById('rev-track');if(!track)return;
+  const cw=revCardWidth();
+  track.style.transition=animate?'transform .5s cubic-bezier(.25,.46,.45,.94)':'none';
+  track.style.transform=`translateX(-${revIdx*(cw+REV_GAP)}px)`;
+  document.querySelectorAll('.rev-dot').forEach((d,i)=>{const a=i===revIdx;d.style.width=a?'22px':'8px';d.style.background=a?'var(--sap)':'rgba(15,37,87,.18)';});
+  const prev=document.getElementById('rev-prev');const next=document.getElementById('rev-next');
+  if(prev)prev.style.opacity=revIdx===0?'.38':'1';
+  if(next)next.style.opacity=revIdx>=revMaxIdx()?'.38':'1';
+}
+function revSlide(dir){revIdx=Math.max(0,Math.min(revIdx+dir,revMaxIdx()));revUpdate();revResetAuto();}
+function revResetAuto(){clearInterval(revTimer);revTimer=setInterval(()=>{revIdx=revIdx>=revMaxIdx()?0:revIdx+1;revUpdate();},REV_INTERVAL);}
+function revInit(){
+  const dots=document.getElementById('rev-dots');if(!dots)return;
+  dots.innerHTML='';
+  for(let i=0;i<=revMaxIdx();i++){const d=document.createElement('div');d.className='rev-dot';d.style.cssText='height:8px;border-radius:9px;cursor:pointer;transition:all .3s;background:rgba(15,37,87,.18);width:8px';d.onclick=()=>{revIdx=i;revUpdate();revResetAuto();};dots.appendChild(d);}
+  revIdx=0;revUpdate(false);revResetAuto();
+  const wrap=document.getElementById('rev-wrap');if(!wrap)return;
+  wrap.onmousedown=e=>{revDragging=true;revDragMoved=false;revDragStartX=e.clientX;wrap.style.cursor='grabbing';};
+  document.onmousemove=e=>{if(!revDragging)return;if(Math.abs(e.clientX-revDragStartX)>6)revDragMoved=true;};
+  document.onmouseup=e=>{if(!revDragging)return;revDragging=false;wrap.style.cursor='grab';if(!revDragMoved)return;const d=e.clientX-revDragStartX;if(d<-50)revSlide(1);else if(d>50)revSlide(-1);};
+  wrap.addEventListener('touchstart',e=>{revDragStartX=e.touches[0].clientX;},{passive:true});
+  wrap.addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-revDragStartX;if(d<-50)revSlide(1);else if(d>50)revSlide(-1);},{passive:true});
+}
+window.addEventListener('resize',()=>revUpdate(false));
+
+// Chatbot
+const BA={
+  trial:["✅ Start your 14-day free trial — no credit card required. Click 'Open the App' at the top of the page, or go to d3jt1vpskh0hbe.cloudfront.net/"],
+  pricing:["💰 Real Cost is $10/user/month or $80/user/year (save 33%). 14-day free trial included, no card needed."],
+  features:["🔍 Key features: Digital Takeoff Canvas (upload PDF drawings), Auto-Count (find symbols across all pages instantly), Bid Page (material, labour, overhead, duration), Canadian city pricing (L1/L2/L3), Supplier RFQs, one-click Quote Letter, Estimate Graph, and Team Management."],
+  autocount:["🤖 Auto-Count: draw a rectangle around any symbol on your drawing — Real Cost uses pattern matching to find and count all matching assemblies across every page of your drawing set, instantly. No manual clicking."],
+  bidpage:["💰 The Bid Page auto-calculates material costs, labour hours, overhead, markup, and project duration from your takeoff counts. Everything updates live as you make changes."],
+  quote:["📋 Once your bid is done, one click generates a professional branded PDF or Word quote letter — ready to send to your client immediately."],
+  trades:["🏗 Real Cost supports: Electrical, Mechanical/HVAC, Plumbing, Fire Alarm, Voice & Data, Security, Audio/Visual, Heat Tracing, and Mechanical Control."],
+  pricing_can:["📍 Material rates auto-adjust to your city's regional pricing tier (L1/L2/L3) — covering Toronto, Ottawa, Montreal, Calgary, Vancouver, Quebec and more."],
+  contact:["📞 (647) 677-8399 · info@realcostestimating.ca · Toronto, Ontario · Mon–Fri 9AM–6PM ET"],
+  default:["👋 Hi! I can help with anything about Real Cost — features, pricing, how the AI works, or how to get started. What would you like to know?"]
+};
+const QRS=[["🚀 Free trial","trial"],["💰 Pricing","pricing"],["🔍 Auto-count","autocount"],["🏗 Trades","trades"],["📞 Contact","contact"]];
+let co=false;
+function tc(){co=!co;document.getElementById('cw').classList.toggle('open',co);if(co&&!document.getElementById('cm').children.length){am("Hi! 👋 I'm the Real Cost assistant. Ask me anything about our digital estimation platform!","bot");rQ();}}
+function am(t,tp){const m=document.getElementById('cm');const d=document.createElement('div');d.className=tp==='bot'?'mbot':'musr';d.textContent=t;m.appendChild(d);m.scrollTop=m.scrollHeight;}
+function rQ(){document.getElementById('qr').innerHTML=QRS.map(([l,k])=>`<button class="cqr" onclick="hQ('${k}','${l}')">${l}</button>`).join('');}
+function hQ(k,l){am(l,'user');setTimeout(()=>{am((BA[k]||BA.default)[0],'bot');rQ();},400);}
+function sc(){
+  const i=document.getElementById('ci'),t=i.value.trim();if(!t)return;
+  am(t,'user');i.value='';document.getElementById('qr').innerHTML='';
+  setTimeout(()=>{
+    const l=t.toLowerCase();let k='default';
+    if(l.includes('trial')||l.includes('free')||l.includes('start'))k='trial';
+    else if(l.includes('price')||l.includes('cost')||l.includes('how much')||l.includes('$'))k='pricing';
+    else if(l.includes('auto') || l.includes('count')||l.includes('ai')||l.includes('symbol'))k='autocount';
+    else if(l.includes('bid')||l.includes('calculat'))k='bidpage';
+    else if(l.includes('quote')||l.includes('letter'))k='quote';
+    else if(l.includes('trade')||l.includes('electrical')||l.includes('mechanical')||l.includes('plumb')||l.includes('fire'))k='trades';
+    else if(l.includes('city')||l.includes('toronto')||l.includes('montreal')||l.includes('canada')||l.includes('pricing'))k='pricing_can';
+    else if(l.includes('feature')||l.includes('platform')||l.includes('takeoff'))k='features';
+    else if(l.includes('contact')||l.includes('phone')||l.includes('email')||l.includes('support'))k='contact';
+    am((BA[k]||BA.default)[0],'bot');rQ();
+  },500);
+}
+</script>
+</body>
+</html>
+
